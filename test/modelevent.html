@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+<script type="text/javascript" src="../dev/model.js"></script>
+<script type="text/javascript">
+  var tab1 = new RenderModel({
+      onactive: function(){
+      },
+
+    events: {
+      tap: {
+        '.a': function(){
+        },
+
+        '.b": function(){
+        }
+      }
+    }
+  });
+
+  Model.defaultEvents = function(eventname){
+      $("body").on("tap", eventname, function(){
+          Model.trigger("eventname");
+      });
+  });
+
+  var mutitab = new MutexModel({
+  });
+  mutitab.add("", new Model());
+  mutitab.add(".p", tab1);
+  mutitab.add('.a', tab2);
+  mutitab.add('domcomplete', tab2);
+
+  tab1 = new PageModel();
+  tab1.add(tab2, tab3);
+
+  tab1.onactive = function(){
+      this.container.addClass("active");
+  };
+
+  tab1.onunactive = function(){
+      this.container.removeClass("active");
+  };
+
+  $("body").on("complte", function(){
+      trigger("domcomplete");
+  });
+
+  mutitab.add(tab1, );
+
+</script>
+</body>
+</html>
