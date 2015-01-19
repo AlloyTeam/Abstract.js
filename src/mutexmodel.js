@@ -42,16 +42,21 @@
 
         // 如果不激活了 不激活相应当前child即可
         unactive: function(eventName){
-            /*
             this.children.map(function(item){
-                if(item.status === "active"){
+                if(item.status === "active" || ! item.status){
                     item.stop(eventName);
                 }
             });
-            */
+
+            /*
+            for(var i = 0; i < this.children.length; i ++){
+                var item = this.children[i];
+            }
+
             if(this.currChild){
                 this.currChild.stop(eventName);
             }
+            */
         }
     });
 

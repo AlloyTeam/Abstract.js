@@ -6,8 +6,8 @@
     var Event = function(opt){
         this.bubble = true;
 
-        this.type = opt.type || opt.name || "";
-        this.name = this.type;
+        this.type = opt.type || "";
+        this.name = opt.name;
 
         this.target = opt.target;
     };
@@ -21,6 +21,8 @@
     };
 
     var Model = {
+        fuseMap: {
+        },
         Class: function(parentClass, prototype){
             var parent = parentClass;
             var proto = prototype;
@@ -90,6 +92,15 @@
         },
 
         trigger: function(eventName){
+            if(this.fuseMap[eventName]){
+                var event = this.createEvent({
+                    target: this.fuseMap[eventName],
+                    name: eventName,
+                    type: "actived"
+                });
+
+                this.fuseMap[eventName].rock(event);
+            }
         },
 
         external: function(name, obj){
@@ -98,6 +109,10 @@
 
         createEvent: function(opt){
             return new Event(opt);
+        },
+
+        addFuse: function(fuse, model){
+            this.fuseMap[fuse] = model;
         }
     };
 
