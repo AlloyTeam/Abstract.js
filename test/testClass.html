@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+<script type="text/javascript" src="../src/core.js"></script>
+<script type="text/javascript">
+
+// 无constructor 
+// 有父对象  继承父对像的constructor
+var Tmodel = Model.Class({
+   a: 1,
+   b: function(opt){
+   },
+
+  constructor: function(opt){
+    this.a = opt;
+    console.log("construtor run");
+  }
+});
+
+var TSonModel = Model.Class(Tmodel, {
+    a: 2,
+    c: function(){
+      console.log(this.a);
+    },
+
+  constructor: function(opt){
+    console.log("OK run");
+
+    this.callSuper(opt);
+
+    this.m = 1;
+  }
+});
+
+var TSonSonModel = Model.Class(Tmodel, {
+    a: 5,
+    constructor: function(opt){
+      this.callSuper(opt);
+
+      this.m = 2;
+    }
+});
+
+
+var b = new Tmodel(3);
+var c = new TSonModel(4);
+var m = new TSonSonModel(6);
+
+console.log(c.a);
+console.log(m.a);
+
+</script>
+</body>
+</html>
