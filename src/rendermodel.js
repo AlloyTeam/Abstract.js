@@ -1,6 +1,7 @@
 // a implatement for baseModel
 ;(function(){
     var RenderModel = Model.Class("BaseModel", {
+        type: "RenderModel",
         active: function(){
             //console.log("renderModel rocked");
         },

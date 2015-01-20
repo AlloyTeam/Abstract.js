@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html lang="en" ng-app="model">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+  <style type="text/css">
+html,body{
+  width: 1200px;
+  margin: 0 auto;
+}
+h1{
+  text-align: center;
+}
+.draggable{
+  position: absolute;
+  z-index: 10;
+} 
+.model{
+  padding: 0;
+  display: inline-block;
+  cursor: default;
+}
+.model .icon{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  vertical-align: middle;
+  display: inline-block;
+  -webkit-transition: box-shadow ease-in 0.2s;
+}
+.model:hover .icon{
+  box-shadow: 0 0 2px 2px red;
+}
+.model.active .icon{
+  box-shadow: 0 0 2px 2px red;
+}
+.model.modelActive .icon{
+  border-color: green;
+  background: green;
+}
+.model.MutexModel .icon:after{
+  content: "|";
+  position: absolute;
+  top: 7px;
+  left: 12px;
+  color: #3D3D3D;
+  font-size: 18px;
+}
+.model.MutexModel.modelActive .icon:after{
+  color: #fff;
+}
+.model label{
+  display: inline-block;
+  vertical-align: middle;
+}
+.drawErea{
+  width: 800px;
+  height: 900px;
+  border: 1px solid #ccc;
+  float: left;
+  position: relative;
+  overflow: hidden;
+}
+.modelselector{
+  float: left;
+  width: 300px;
+  margin-left: 10px;
+}
+.modelselector .model{
+  margin-top: 10px;
+  border-radius: 2px;
+  border: 1px solid #ccc;
+  padding: 4px 6px;
+}
+svg{
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+.power{
+  clear: both;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+}
+  </style>
+</head>
+<body ng-controller="main">
+<h1>Model Tree Test</h1>
+<div class="drawErea">
+  <div class="root model {{item.type}} draggable" ng-click="focusItem(item)" draggable dragdata="item" ng-class="{'active': currItem === item, 'modelActive': item.status === 'active'}" on-drag="modelOnDrag" ng-style="{left: item.position[0] + 'px', top: item.position[1] + 'px'}" id="{{item.id}}" ng-repeat="item in models">
+    <div class="icon"></div>
+    <label class="label">{{item.type}}</label>
+  </div>
+
+  <svg id="svgLineTutorial" xmlns="http://www.w3.org/2000/svg">
+  <line ng-repeat="item in lines" ng-attr-x1="{{item.start[0]+16}}" ng-attr-y1="{{item.start[1] + 32}}" ng-attr-x2="{{item.end[0]+16}}" ng-attr-y2="{{item.end[1]}}" ng-style="item.style" tstyle="stroke:Green;stroke-width:2"/>
+  </svg>
+  
+</div>
+
+<div class="modelselector">
+  <h2>点击添加子模型</h2>
+  <div class="baseModel model" ng-click="add('BaseModel');">baseModel</div><br />
+  <div class="renderModel model" ng-click="add('RenderModel');">renderModel</div><br />
+  <div class="scrollModel model" ng-click="add('ScrollModel');">scrollModel</div><br />
+  <div class="mutexModel model" ng-click="add('MutexModel');">mutexModel</div><br />
+  <div class="pageModel model" ng-click="add('PageModel');">pageModel</div><br />
+
+  <h2>点击rock模型</h2>
+  <div class="model" ng-click="rock()">Rock</div>
+</div>
+
+<div class="power">
+  Powered by Model.js
+</div>
+
+<script type="text/javascript" src="lib/angular.min.js"></script>
+<script type="text/javascript" src="lib/directive.js"></script>
+<script type="text/javascript" src="lib/jquery.js"></script>
+<script type="text/javascript" src="../src/core.js"></script>
+<script type="text/javascript" src="../src/basemodel.js"></script>
+<script type="text/javascript" src="../src/rendermodel.js"></script>
+<script type="text/javascript" src="../src/relationmodel.js"></script>
+<script type="text/javascript" src="../src/mutexmodel.js"></script>
+<script type="text/javascript" src="modeltree.js"></script>
+	
+</body>
+</html>

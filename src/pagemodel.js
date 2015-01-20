@@ -23,8 +23,6 @@
                                 child.stop();
                             }
                         }
-
-                        this.currChild = target;
                     }
                 }
             });

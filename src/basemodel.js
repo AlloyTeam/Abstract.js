@@ -1,6 +1,7 @@
 ;(function(){
     var acceptOpt = ['tmpl', 'el', 'data', 'fuse'];
     var BaseModel = Model.Class({
+        type: "BaseModel",
         get acceptOpt(){
             return acceptOpt;
         },
@@ -57,7 +58,7 @@
         // 这里写处于激活态的时候动作
         // 用户可自定义 
         // 事件传播不在这里处理保证不受用户处理事件传播
-        // onactive时的动作
+        // 监听用户激活的事件
         active: function(event){
         },
 
@@ -66,18 +67,19 @@
         },
 
         // rock就是主动使其处于激活态
-        // 如果其已于激活态 根据关系模型使其子模型处理激活态
-        rock: function(event){
+        // 这里的src始终是自己
+        // 并抛出激活事件
+        // 这里triggerName
+        rock: function(eventName){
             console.log(this.el, "rocked");
             this.status = "active";
 
-            if(! event){
-                var event = Model.createEvent({
-                    type: "actived",
-                    target: this,
-                    name: 'anonymouse'
-                });
-            }
+ 
+            var event = Model.createEvent({
+                type: "actived",
+                target: this,
+                name: eventName || 'anonymouse'
+            });
 
             // active时的动作
             this.active(event);
@@ -85,17 +87,15 @@
             this.dispatchEvent(event);
         },
 
-        stop: function(event){
+        stop: function(eventName){
             console.log(this.el, "unrocked");
             this.status = "unactive";
 
-            if(! event){
-                event = Model.createEvent({
-                    type: "unactived",
-                    target: this,
-                    name: 'anonymouse'
-                });
-            }
+            var event = Model.createEvent({
+                type: "unactived",
+                target: this,
+                name: eventName || 'anonymouse'
+            });
 
             this.unactive(event);
 
