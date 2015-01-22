@@ -193,6 +193,7 @@ angular.module("directives", [])
                     if(scope.dragdata){
                         scope.dragdata.position[0] = l;
                         scope.dragdata.position[1] = t;
+                        scope.dragdata.moved = 1;
 
                         scope.onDrag && scope.onDrag();
                     }

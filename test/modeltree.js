@@ -1,5 +1,5 @@
 angular.module("model", ["directives"])
-.controller("main", function($scope){
+.controller("main", function($scope, $timeout){
     $scope.models = [];
     $scope.lines = [];
 
@@ -29,7 +29,7 @@ angular.module("model", ["directives"])
                 var middley = py + DHEIGHT;
 
                 node.children.map(function(item, index){
-                    if(! item.position){
+                    if(! item.position || ! item.moved){
                         // 计算child点的坐标
                         var x = middlex + (index + 1 - (length + 1) / 2) * DWIDTH;
                         var y = middley;
@@ -89,7 +89,7 @@ angular.module("model", ["directives"])
         $scope.lines = lines;
     };
 
-    var modelData = new MutexModel();
+    var modelData = new PageModel();
     $scope.modelData = modelData;
 
 
@@ -106,7 +106,17 @@ angular.module("model", ["directives"])
     };
 
     $scope.add = function(model){
-        if(window[model]){
+        if(window[model] && $scope.currItem){
+            if($scope.currItem.type === "RenderModel"){
+                showConfirm("无法对RenderModel增加节点模型");
+                return;
+            }
+
+            if($scope.currItem.type === "BaseModel"){
+                showConfirm("无法对BaseModel增加节点模型");
+                return;
+            }
+
             var newModel = new window[model];
 
             if($scope.currItem){
@@ -117,11 +127,31 @@ angular.module("model", ["directives"])
         }
     };
 
+    $scope.delModel = function(){
+        $scope.currItem && $scope.currItem.remove();
+
+        formatModelData();
+    };
+
     $scope.rock = function(){
         if($scope.currItem){
             $scope.currItem.rock()
 
             formatModelData();
         }
+    };
+
+    var showConfirm = function(text){
+        $scope.confirmStyle.opacity = 1;
+        $scope.confirmTips = text;
+
+        $timeout(function(){
+            $scope.confirmStyle.opacity = 0;
+        }, 2000);
+
+    };
+
+    $scope.confirmStyle = {
+        opacity: 0
     };
 });

@@ -39,7 +39,7 @@ h1{
   border-color: green;
   background: green;
 }
-.model.MutexModel .icon:after{
+.model.MutexModel .icon:after,.model.PageModel .icon:after{
   content: "|";
   position: absolute;
   top: 7px;
@@ -47,7 +47,12 @@ h1{
   color: #3D3D3D;
   font-size: 18px;
 }
-.model.MutexModel.modelActive .icon:after{
+.model.PageModel .icon:after{
+  content: "+";
+  color: #3D3D3D;
+}
+.model.MutexModel.modelActive .icon:after,
+.model.PageModel.modelActive .icon:after{
   color: #fff;
 }
 .model label{
@@ -85,10 +90,36 @@ svg{
   height: 40px;
   line-height: 40px;
 }
+.menu{
+  margin-bottom: 5px;
+}
+.button{
+  padding: 4px;
+  border-radius: 2px;
+  border: 1px solid #ccc;
+  display: inline-block;
+  cursor: default;
+}
+.confirm{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 0 2px 2px rgba(178, 178, 178, 1);
+  z-index: 999;
+  color: #000;
+  -webkit-transition: all ease-in 0.4s;
+  opacity: 0;
+}
   </style>
 </head>
 <body ng-controller="main">
 <h1>Model Tree Test</h1>
+<div class="menu">
+  <div class="button" ng-click="delModel()">删除</div>
+</div>
 <div class="drawErea">
   <div class="root model {{item.type}} draggable" ng-click="focusItem(item)" draggable dragdata="item" ng-class="{'active': currItem === item, 'modelActive': item.status === 'active'}" on-drag="modelOnDrag" ng-style="{left: item.position[0] + 'px', top: item.position[1] + 'px'}" id="{{item.id}}" ng-repeat="item in models">
     <div class="icon"></div>
@@ -117,6 +148,8 @@ svg{
   Powered by Model.js
 </div>
 
+<div class="confirm" ng-style="confirmStyle">{{confirmTips}}</div>
+
 <script type="text/javascript" src="lib/angular.min.js"></script>
 <script type="text/javascript" src="lib/directive.js"></script>
 <script type="text/javascript" src="lib/jquery.js"></script>
@@ -125,6 +158,7 @@ svg{
 <script type="text/javascript" src="../src/rendermodel.js"></script>
 <script type="text/javascript" src="../src/relationmodel.js"></script>
 <script type="text/javascript" src="../src/mutexmodel.js"></script>
+<script type="text/javascript" src="../src/pagemodel.js"></script>
 <script type="text/javascript" src="modeltree.js"></script>
 	
 </body>

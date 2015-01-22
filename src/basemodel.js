@@ -55,6 +55,12 @@
             this.children.splice(i, 1);
         },
 
+        remove: function(){
+            if(this.parent){
+                this.parent.del(this);
+            }
+        },
+
         // 这里写处于激活态的时候动作
         // 用户可自定义 
         // 事件传播不在这里处理保证不受用户处理事件传播
