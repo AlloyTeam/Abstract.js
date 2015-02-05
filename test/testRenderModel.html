@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+
+<div id="p"></div>
+<div id="p2"></div>
+	
+<script type="text/javascript" src="../src/sodarender.js"></script>
+<script type="text/javascript" src="../src/core.js"></script>
+<script type="text/javascript" src="../src/basemodel.js"></script>
+<script type="text/javascript" src="../src/rendermodel.js"></script>
+<script type="text/javascript" src="../src/relationmodel.js"></script>
+<script type="text/javascript" src="../src/pagemodel.js"></script>
+<script type="text/javascript" src="../src/mutexmodel.js"></script>
+<script type="text/javascript">
+var t = new RenderModel({
+  comment: "OK",
+  data: {
+    list: [
+      {name: 'a'},
+      {name: 'b'}
+    ]
+  },
+
+  tmpl: "<div soda-repeat='item in list'>{{item.name}}</div>",
+
+  el: '#p',
+  model: function(data, isLocalRender){
+  //data.list[0].name = "sdfsdaf";
+  },
+  complete: function(){
+  },
+  error: function(){
+  },
+
+  events: {
+    focus: function(){
+    }
+  }
+  
+});
+
+var t2 = new RenderModel({
+  comment: "OK",
+  data: {
+    list: [
+      {name: 'a'},
+      {name: 'b'}
+    ]
+  },
+
+  tmpl: "<div soda-repeat='item in list'>{{item.name.p}}</div>",
+
+  el: '#p2',
+  processData: function(data, isLocalRender){
+  },
+  complete: function(){
+  },
+  error: function(){
+  },
+
+  events: {
+    focus: function(item){
+      
+    }
+  }
+  
+});
+
+
+var p = new PageModel();
+p.add(t);
+p.add(t2);
+
+p.rock();
+</script>
+
+</body>
+</html>

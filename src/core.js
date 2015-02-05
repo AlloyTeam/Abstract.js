@@ -21,6 +21,64 @@
     };
 
     var Model = {
+        _config: {
+            ajax: function(opt){
+                if(window.$ && $.ajax){
+                    $.ajax(opt);
+                }else{
+                    var xhr = new XMLHttpRequest();
+
+                    var data = [];
+                    if(opt.data){
+                        for(var i in opt.data){
+                            data.push(i + "=" + opt.data[i]);
+                        }
+                    }
+
+                    data = data.join("&");
+
+                    xhr.onload = function(){
+                    };
+
+                    xhr.open(opt.method, opt.url);
+                    xhr.send(data);
+                }
+            },
+
+            tmpl: function(opt, data, isReplace){
+                var result = sodaRender(opt.tmpl || "", data);
+                var el = opt.el;
+
+                if(window.$){
+                    el = $(el);
+                }else{
+                    if(typeof el === "string"){
+                        el = document.querySelector(el);
+                    }
+                }
+
+                if(el[0]){
+                    el = el[0];
+                }
+
+                if(el instanceof HTMLElement){
+                    if(isReplace){
+                        el.innerHTML = "";
+                    }
+
+                    el && el.appendChild(result);
+                }else{
+                    console.info("Model: option el is not an HTMLElement");
+                }
+            }
+        },
+        config: function(opt){
+            if(opt.ajax){
+                this._config.ajax = opt.ajax;
+            }
+
+            this._config.tmpl = opt.tmpl;
+        },
         fuseMap: {
         },
         Class: function(parentClass, prototype){

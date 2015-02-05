@@ -1,9 +1,19 @@
 ;(function(){
+
+    /**
+     * 如果父类有使用父类的属性 即是继承属性
+     * 
+     */
     var acceptOpt = ['tmpl', 'el', 'data', 'fuse'];
     var BaseModel = Model.Class({
         type: "BaseModel",
+
         get acceptOpt(){
             return acceptOpt;
+        },
+
+        addAcceptOpt: function(arr){
+            acceptOpt = acceptOpt.concat(arr);
         },
 
         set fuse(value){
@@ -17,6 +27,7 @@
         },
         constructor: function(opt){
             // private method
+            // 这些都会被子类重新初始化一遍
             this._fuse = "";
 
             if(opt){
@@ -132,7 +143,19 @@
             }
 
             this.eventHandler[type].push(handler);
+        },
+
+        info: function(msg){
+            var args = [];
+            var args = ["Model:", (this.comment || (typeof this.el === "string" ? this.el : this.el && this.el.selector)) + ":"];
+
+            for(var i = 0; i < arguments.length; i ++){
+                args.push(arguments[i]);
+            }
+
+            console.info.apply(console, args);
         }
+
     });
 
     Model.external("BaseModel", BaseModel);
