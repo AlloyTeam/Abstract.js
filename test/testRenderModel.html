@@ -29,7 +29,7 @@ var t = new RenderModel({
   tmpl: "<div soda-repeat='item in list'>{{item.name}}</div>",
 
   el: '#p',
-  model: function(data, isLocalRender){
+  processData: function(data, isLocalRender){
   //data.list[0].name = "sdfsdaf";
   },
   complete: function(){
@@ -53,7 +53,7 @@ var t2 = new RenderModel({
     ]
   },
 
-  tmpl: "<div soda-repeat='item in list'>{{item.name.p}}</div>",
+  tmpl: "<div soda-repeat='item in list'>{{item.name}}</div>",
 
   el: '#p2',
   processData: function(data, isLocalRender){
@@ -63,6 +63,7 @@ var t2 = new RenderModel({
   error: function(){
   },
 
+  url: "data.php",
   events: {
     focus: function(item){
       

@@ -3,6 +3,39 @@
  * @author dorsywang
  */
 ;(function(){
+    var originInfo = console.info;
+    var originLog = console.log;
+
+    var _lastMsg = [];
+    console.log = function(){
+        _lastMsg = arguments;
+
+        originLog.apply(console, arguments);
+    };
+
+    console.info = function(){
+        var container = arguments[1];
+
+        var currMsg;
+        var args = Array.prototype.slice.call(arguments, 0);
+        var currArgs = arguments;
+
+        if(_lastMsg[0] && _lastMsg[0] === "Model:"){
+            //currArgs[0] = currArgs[0].replace(/./g, " ");
+            currArgs[0] = "♫";
+
+            if(_lastMsg[1] && _lastMsg[1] === container){
+                //currArgs[1] =  currArgs[1].replace(/./g, " ");
+                currArgs[1] = " ↗";
+            }else{
+                //currArgs = Array.prototype.slice.call(arguments, 1);
+            }
+        }
+
+        originInfo.apply(console, currArgs);
+        _lastMsg = args;
+    };
+
     var Event = function(opt){
         this.bubble = true;
 
@@ -38,6 +71,15 @@
                     data = data.join("&");
 
                     xhr.onload = function(){
+                        var data = this.response;
+
+                        var contentType = (this.getResponseHeader("Content-type") || '').toLowerCase();
+
+                        if(/json/.test(contentType)){
+                            data = JSON.parse(data);
+                        }
+
+                        opt.success(data);
                     };
 
                     xhr.open(opt.method, opt.url);

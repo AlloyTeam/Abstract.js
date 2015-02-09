@@ -8,8 +8,8 @@
 
             // 如果之前有发过请求，则使用缓存的参数池中对应的参数，否则使用param方法构造参数
             // 这里保留的是cache原型
-            var param = _this.paramCache[_this.cgiCount] || (typeof this.param == "object" && this.param) || this.param.call(this);
-
+            var param = _this.paramCache[_this.cgiCount] || (typeof this.param == "object" && this.param) || (typeof this.param === "function" && this.param.call(this)) || {};
+            var paramToReal = param;
 
             if(this._args){
                 var paramStr = JSON.stringify(param);
@@ -27,7 +27,7 @@
 
             var opt = {
                 method: "POST",
-                url: this.cgiName,
+                url: this.url,
                 data: paramToReal,
                 success: function(res, isLocalRender){
                    
@@ -182,7 +182,7 @@
                 }
             }
             //使用预加载数据模式的话，没有缓存也不发请求了，静待预加载数据返回即可
-            else if(!this.usePreLoad){
+            else{
                 var defer = this.beforeRequest && this.beforeRequest();
 
                 if(typeof defer === "boolean" && ! defer){
@@ -193,10 +193,7 @@
                 this.info("    cgi: " + opt.url);
                 this.info("   ", paramToReal);
 
-                DB.cgiHttp(opt);
-            }
-            else{
-                _this.paramCache[_this.cgiCount] = param;
+                Model._config.ajax(opt);
             }
         },
 
@@ -254,14 +251,15 @@
             };
 
             if(this.url){
-                
+                this.getData(callback);
             }else{
                 if(this.data){
                 }else{
                     this.data = {};
                 }
 
-                this.info("   data given");
+                this.info("   data given↙");
+                this.info("   ", this.data);
 
                 callback(this.data);
             }
@@ -281,7 +279,7 @@
         },
 
         constructor: function(opt){
-            this.addAcceptOpt(['complete', 'processData']);
+            this.addAcceptOpt(['complete', 'processData', 'url']);
             this.callSuper(opt);
 
             // 私有标志位
@@ -290,6 +288,7 @@
 
             // 可被对象继承的属性
             this.paramCache = [];
+            this.dataCache = [];
         }
     });
 
