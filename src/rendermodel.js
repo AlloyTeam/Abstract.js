@@ -1,5 +1,42 @@
-// a implatement for baseModel
+// an implatement for baseModel
 ;(function(){
+
+    /**
+     * 根据cgi和参数生成对应的localStorge
+     * 要去除类似随机数的参数
+     */
+    var getKey = function(cgiName, param){
+        var o = {};
+
+        for(var i in param){
+            var localKeyExclude = Model._config.localKeyExclude || [];
+            if(localKeyExclude.length){
+                if(localKeyExclude.indexOf){
+                    if(localKeyExclude.indexOf(i)){
+                        continue;
+                    }
+                }
+            }else{
+                var flag = 0;
+                for(var j = 0; j < localKeyExclude.length; j ++){
+                    if(i == localKeyExclude[j]){
+                        flag = 1;
+                    }
+                }
+
+                if(flag){
+                    continue;
+                }
+            }
+
+            o[i] = param[i];
+        }
+
+        var key = cgiName + "_" + JSON.stringify(o);
+
+        return key;
+    };
+
     var RenderModel = Model.Class("BaseModel", {
         type: "RenderModel",
         getData: function(callback){
@@ -46,7 +83,7 @@
 
                     // 如果是第一次从cgi请求的数据 则缓存数据到localStrage里面
                     if(_this.cgiCount == 1){
-                        var key = (_this.cacheKey || getKey)(_this.cgiName, paramToReal);
+                        var key = (_this.cacheKey || getKey)(_this.url, paramToReal);
 
                         if(key){
                             try{
@@ -128,9 +165,9 @@
 
 
             //如果是第一次渲染，且cgi也还没有发送请求 那么 使用缓存中数据
-            if(!_this.noCache && _this.cgiCount == 0 && _this.isFirstRender){
+            if(!_this.noCache && _this.cgiCount == 0){
                 
-                var key = (_this.cacheKey || getKey)(this.cgiName, paramToReal);
+                var key = (_this.cacheKey || getKey)(this.url, paramToReal);
 
                 localData = null;
                 try{
@@ -139,14 +176,13 @@
                     
                 }
 
-                if(localData && localData.result){
+                if(localData){
 
                     try{
                         this.info("has localData");
                         this.info("    start localData rendering");
-                        opt.succ(localData, 1);
+                        opt.success(localData, 1);
                     }catch(e){
-                        Q.monitor(453668);
                     }
                 }
 
@@ -278,13 +314,19 @@
             }
         },
 
-        constructor: function(opt){
-            this.addAcceptOpt(['complete', 'processData', 'url', 'param']);
-            this.callSuper(opt);
-
+       _resetPrivateFlag: function(){
             // 私有标志位
             this.rendered = 0;
             this.feedPool = [];
+
+            this.cgiCount = 0;
+       },
+
+        constructor: function(opt){
+            this.addAcceptOpt(['complete', 'processData', 'url', 'param', 'noCache']);
+            this.callSuper(opt);
+
+            this._resetPrivateFlag();
 
             // 可被对象继承的属性
             this.paramCache = [];

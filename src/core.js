@@ -74,6 +74,7 @@
                         var data = this.response;
 
                         var contentType = (this.getResponseHeader("Content-type") || '').toLowerCase();
+                        var status = this.status;
 
                         if(/json/.test(contentType)){
                             data = JSON.parse(data);
@@ -82,7 +83,7 @@
                         opt.success(data);
                     };
 
-                    xhr.open(opt.method, opt.url);
+                    xhr.open(opt.method, opt.url, true);
                     xhr.send(data);
                 }
             },
@@ -112,7 +113,9 @@
                 }else{
                     console.info("Model: option el is not an HTMLElement");
                 }
-            }
+            },
+
+            localKeyExclude: []
         },
         config: function(opt){
             if(opt.ajax){
