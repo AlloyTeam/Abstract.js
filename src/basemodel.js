@@ -154,6 +154,16 @@
             }
 
             console.info.apply(console, args);
+        },
+
+        reset: function(){
+            var event = Model.createEvent({
+                type: "reset",
+                target: this,
+                name: 'anonymouse'
+            });
+
+            this.dispatchEvent(event);
         }
 
     });

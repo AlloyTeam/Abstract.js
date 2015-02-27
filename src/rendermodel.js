@@ -279,7 +279,7 @@
         },
 
         constructor: function(opt){
-            this.addAcceptOpt(['complete', 'processData', 'url']);
+            this.addAcceptOpt(['complete', 'processData', 'url', 'param']);
             this.callSuper(opt);
 
             // 私有标志位
