@@ -76,11 +76,16 @@
                         var contentType = (this.getResponseHeader("Content-type") || '').toLowerCase();
                         var status = this.status;
 
-                        if(/json/.test(contentType)){
-                            data = JSON.parse(data);
-                        }
+                        if(status === 200 || status === 304){
 
-                        opt.success(data);
+                            if(/json/.test(contentType)){
+                                data = JSON.parse(data);
+                            }
+
+                            opt.success(data);
+                        }else{
+                            opt.error(data);
+                        }
                     };
 
                     xhr.open(opt.method, opt.url, true);

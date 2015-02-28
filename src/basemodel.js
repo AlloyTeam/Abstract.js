@@ -4,7 +4,7 @@
      * 如果父类有使用父类的属性 即是继承属性
      * 
      */
-    var acceptOpt = ['tmpl', 'el', 'data', 'fuse'];
+    var acceptOpt = ['tmpl', 'el', 'data', 'fuse', 'myData'];
     var BaseModel = Model.Class({
         type: "BaseModel",
 

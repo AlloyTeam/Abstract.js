@@ -323,7 +323,7 @@
        },
 
         constructor: function(opt){
-            this.addAcceptOpt(['complete', 'processData', 'url', 'param', 'noCache']);
+            this.addAcceptOpt(['complete', 'processData', 'error', 'url', 'param', 'noCache', 'events']);
             this.callSuper(opt);
 
             this._resetPrivateFlag();

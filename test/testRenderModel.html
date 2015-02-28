@@ -52,17 +52,22 @@ var t2 = new RenderModel({
       {name: 'b'}
     ]
   },
+
+myData: {
+  type: 100
+},
   tmpl: "<div soda-repeat='item in list'>{{item.name}}</div>",
 
   el: '#p2',
   processData: function(data, isLocalRender){
+    console.log(this.myData.type);
     console.log('processing ....', data, isLocalRender);
   },
   complete: function(){
     console.log('complete ....');
   },
-  error: function(){
-    console.log('error occured....');
+  error: function(res, cgiCount){
+    console.log('error occured....', res, cgiCount);
   },
 
   param: {
