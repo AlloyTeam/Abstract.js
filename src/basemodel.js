@@ -4,7 +4,7 @@
      * 如果父类有使用父类的属性 即是继承属性
      * 
      */
-    var acceptOpt = ['tmpl', 'el', 'data', 'fuse', 'myData'];
+    var acceptOpt = ['tmpl', 'el', 'data', 'fuse', 'myData', 'onreset'];
     var BaseModel = Model.Class({
         type: "BaseModel",
 
@@ -46,6 +46,11 @@
 
             this.children = [];
             this.parent = null;
+
+            var _this = this;
+            this.addEventListener("reset", function(e){
+                _this.onreset && _this.onreset();
+            });
         },
 
         // 增加model上去

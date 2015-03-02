@@ -75,11 +75,13 @@ myData: {
   },
 
   url: "data.php",
-  events: {
-    focus: function(item){
-      
-    }
-  }
+  events: function(){
+     console.log('event binded');
+  },
+
+onreset: function(){
+           alert("OK");
+         }
   
 });
 
@@ -89,6 +91,10 @@ p.add(t);
 p.add(t2);
 
 p.rock();
+
+setTimeout(function(){
+   t2.reset();
+}, 1000);
 </script>
 
 </body>

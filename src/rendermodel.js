@@ -261,7 +261,7 @@
 
                 if(_this.eventsBinded){
                 }else{
-                    _this.events && _this.events();
+                    _this.events && (typeof _this.events === "function" && _this.events());
 
                     if(_this.hasOwnProperty("eventsBinded")){
                         _this.eventsBinded = 1;
@@ -328,9 +328,14 @@
 
             this._resetPrivateFlag();
 
+            this.eventsBinded = 0;
+
             // 可被对象继承的属性
             this.paramCache = [];
             this.dataCache = [];
+
+            var _this = this;
+
         }
     });
 
