@@ -166,12 +166,21 @@
 
                 // 调父元素的构造方法
                 proto.callSuper = function(){
+                    var args = ['constructor'].concat([].slice.call(arguments, 0));
+                    this.callSuperMethod.apply(this, args);
+                };
+
+                // 调用父类的方法
+                proto.callSuperMethod = function(){
+                    var method = [].slice.call(arguments, 0, 1);
+                    var args = [].slice.call(arguments, 1) || [];
+
                     var _super = this.super;
 
                     if(_super){
                         this.super = _super.super;
 
-                        _super.constructor.apply(this, arguments);
+                        (_super[method] || function(){}).apply(this, args);
 
                         this.super = _super;
                     }
