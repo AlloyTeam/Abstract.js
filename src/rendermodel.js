@@ -208,13 +208,13 @@
                     this.dataCache[_this.cgiCount] = function(isError){
 
                         if(! isError){
-                            opt.succ(_this.dataCache[_this.cgiCount]);
+                            opt.success(_this.dataCache[_this.cgiCount]);
                         }else{
-                            opt.err(_this.dataCache[_this.cgiCount]);
+                            opt.error(_this.dataCache[_this.cgiCount]);
                         }
                     };
                 }else{
-                    opt.succ(this.dataCache[_this.cgiCount]);
+                    opt.success(this.dataCache[_this.cgiCount]);
                 }
             }
             //使用预加载数据模式的话，没有缓存也不发请求了，静待预加载数据返回即可
@@ -247,7 +247,16 @@
 
                 _this.info("start to process data");
 
-                _this.processData && _this.processData.call(_this, data, _this.cgiCount);
+                var returnVal;
+                _this.processData && (returnVal = _this.processData.call(_this, data, _this.cgiCount));
+
+                if(typeof returnVal === "undefined"){
+                }else{
+                    if(typeof returnVal === 'boolean' && ! returnVal){
+                    }else{
+                        data = returnVal;
+                    }
+                }
 
                 var opt = {
                     tmpl: _this.tmpl,
@@ -302,8 +311,8 @@
         },
         active: function(){
             //console.log("renderModel rocked");
-            if(! this.rendered){
-                this.rendered = 1;
+            //if(! this.rendered){
+                //this.rendered = 1;
 
                 var el = this.el;
                 if(typeof el === "string"){
@@ -311,7 +320,7 @@
                 }
 
                 this.render(el, 1);
-            }
+            //}
         },
 
        _resetPrivateFlag: function(){
@@ -322,8 +331,9 @@
             this.cgiCount = 0;
        },
 
-        constructor: function(opt){
-            this.addAcceptOpt(['complete', 'processData', 'error', 'url', 'param', 'noCache', 'events']);
+
+       constructor: function(opt){
+            this.addAcceptOpt(['complete', 'processData', 'error', 'url', 'param', 'noCache', 'events', 'noRefresh']);
             this.callSuper(opt);
 
             this._resetPrivateFlag();
@@ -336,6 +346,83 @@
 
             var _this = this;
 
+            this.addEventListener("reset", function(e){
+                if(e.target === this){
+                    this.cgiCount = 0;
+                    this.melt(); 
+                }
+            });
+
+            this.addEventListener("refresh", function(e){
+                if(e.target === this){
+                    if(this.noRefresh){
+                    }else{
+                        this.dataCache = [];
+                        this.reset();
+                        this.rock();
+                    }
+                }
+            });
+
+        },
+
+        extend: function(opt){
+            if (!opt) {
+                opt = {};
+            }
+
+            var func = function() {};
+
+            var events = opt.events;
+
+            func.prototype = this; //object;
+
+            var clone = new func();
+
+            this._resetPrivateFlag.call(clone);
+
+            /*
+            clone.feedPool = [];
+            clone.cgiCount = 0;
+            clone.dataCache = [];
+            clone.isFirstDataRequestRender = 0;
+            clone.isFirstRender = 1;
+            clone._addedToModel = 0;
+            clone.canScrollInMTB = 1;
+            clone.dead = 0;
+            */
+
+            //如果重新定义了param 不使用缓存
+            if (opt.param) {
+                clone.paramCache = [];
+            }
+
+            for (var i in opt) {
+                clone[i] = opt[i];
+            }
+
+            //如果定义了事件 就不使用原来的事件
+            if (events) {
+                clone.events = function() {
+                    events && events.call(this);
+                };
+
+                clone.eventsBinded = 0;
+            }
+
+            /*
+            if (clone.el) {
+
+                if (_containerCountInfo[clone.el]) {
+                    _containerCountInfo[clone.el]++;
+                } else {
+                    _containerCountInfo[clone.el] = 1;
+                }
+            }
+            */
+
+
+            return clone;
         }
     });
 

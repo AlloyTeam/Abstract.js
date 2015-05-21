@@ -1,0 +1,18 @@
+// https://github.com/modulejs/modjs
+module.exports = {
+    tasks:{
+        cat:{
+            source:['src/sodarender.js', 'src/core.js', 'src/basemodel.js', 'src/relationmodel.js', 'src/pagemodel.js', 'src/mutexmodel.js', 'src/rendermodel.js', 'src/scrollmodel.js']
+            ,dest: 'combined/model.js'
+        },
+        
+        min: {
+                src: 'combined/model.js',
+                dest: 'combined/'
+     }
+    },
+    targets:{
+        dist: "cat min",
+        uncom: "cat"
+    }
+};

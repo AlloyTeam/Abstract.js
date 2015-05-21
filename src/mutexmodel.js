@@ -37,10 +37,27 @@
 
             // 如果不存currChild
             }else{
-                this.currChild = this.children[0];
+                if(this._initChild){
+                    if(typeof this._initChild === "number"){
+                        this.currChild = this.children[this._initChild];
+                    }else{
+                        for(var i = 0; i < this.children.length; i ++){
+                            if(this.children[i] === this._initChild){
+                                this.currChild = this.children[i];
+                                break;
+                            }
+                        }
+                    }
+                }else{
+                    this.currChild = this.children[0];
+                }
 
                 this.currChild && this.currChild.rock(event);
             }
+        },
+
+        initChild: function(indexOrChildModel){
+            this._initChild = indexOrChildModel;
         },
 
         // 如果不激活了 不激活相应当前child即可

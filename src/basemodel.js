@@ -169,6 +169,79 @@
             });
 
             this.dispatchEvent(event);
+        },
+        refresh: function(){
+            var event = Model.createEvent({
+                type: "refresh",
+                target: this,
+                name: 'anonymouse'
+            });
+
+            this.dispatchEvent(event);
+        },
+
+        freeze: function() {
+            this.freezed = 1;
+        },
+
+        melt: function() {
+            this.freezed = 0;
+        },
+
+
+        extend: function(opt){
+        /*
+            if (!opt) {
+                opt = {};
+            }
+
+            var func = function() {};
+
+            var events = opt.events;
+
+            func.prototype = this; //object;
+
+            var clone = new func();
+
+            clone.feedPool = [];
+            clone.cgiCount = 0;
+            clone.dataCache = [];
+            clone.isFirstDataRequestRender = 0;
+            clone.isFirstRender = 1;
+            clone._addedToModel = 0;
+            clone.canScrollInMTB = 1;
+            clone.dead = 0;
+
+            //如果重新定义了param 不使用缓存
+            if (opt.param) {
+                clone.paramCache = [];
+            }
+
+            for (var i in opt) {
+                clone[i] = opt[i];
+            }
+
+            //如果定义了事件 就不使用原来的事件
+            if (events) {
+                clone.events = function() {
+                    events && events.call(this);
+                };
+
+                clone.eventsBinded = 0;
+            }
+
+            if (clone.renderContainer) {
+
+                if (_containerCountInfo[clone.renderContainer]) {
+                    _containerCountInfo[clone.renderContainer]++;
+                } else {
+                    _containerCountInfo[clone.renderContainer] = 1;
+                }
+            }
+
+
+            return clone;
+            */
         }
 
     });
