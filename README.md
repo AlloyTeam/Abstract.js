@@ -31,4 +31,34 @@ var nav = new RenderModel({
 nav.rock();
 
 ```
+page model
 
+```javascript
+var intro = new RenderModel({
+    el: '.intro',
+    tmpl: 'Model.js'
+});
+
+var nav = new RenderModel({
+    el: '.nav',
+    data: {
+        navList: [
+            {name: '简介', cn: '_intro'},
+            {name: '应用', cn: '_applacation'},
+            {name: '文档', cn: '_doc'}
+        ]
+    },
+    tmpl: "<li soda-repeat='item in navList' onclick='switchNav(\"{{item.cn}}\")' class='{{item.cn}}'>{{item.name}}</li>",
+    events: function(){
+        window.switchNav = function(name){
+            Model.trigger("." + name);
+        };
+    }
+});
+
+var page = new PageModel();
+page.add(intro);
+page.add(nav);
+page.rock();
+```
+###Learn Abstract.js(comming soon)
