@@ -5,6 +5,63 @@
      * 根据cgi和参数生成对应的localStorge
      * 要去除类似随机数的参数
      */
+    var elementDisplay = {};
+    var defaultDisplay = function(nodeName) {
+        var element, display;
+
+        if (!elementDisplay[nodeName]) {
+          element = document.createElement(nodeName);
+          document.body.appendChild(element);
+
+          display = getComputedStyle(element, '').getPropertyValue("display");
+          element.parentNode.removeChild(element);
+          display == "none" && (display = "block");
+          elementDisplay[nodeName] = display;
+        }
+
+        return elementDisplay[nodeName]
+    };
+    var $ = window.$ || function(selector){
+            if(window.$){
+                return window.$(selector);
+            }
+
+            return function(){
+                var el;
+                if(typeof selector === "string"){
+                    el = document.querySelectorAll(selector);
+                }else{
+                    if(!('length' in el)){
+                        el = [el];
+                    }
+                }
+
+                return {
+                    html: function(str){
+                        for(var i = 0; i < el.length; i ++){
+                            el[i].innerHTML = str;
+                        }
+                    },
+
+                    show: function(){
+                        for(var i = 0; i < el.length; i ++){
+                            var item = el[i];
+                            item.style.display == "none" && (item.style.display = '');
+
+                            if(getComputedStyle(item, '').getPropertyValue("display") == "none"){
+                                item.style.display = defaultDisplay(item.nodeName)
+                             }
+                        }
+                    },
+
+                    hide: function(){
+                        for(var i = 0; i < el.length; i ++){
+                            el[i].style.display = "none";
+                        }
+                    }
+                };
+            }();
+    };
     var getKey = function(cgiName, param){
         var o = {};
 
@@ -35,6 +92,13 @@
         var key = cgiName + "_" + JSON.stringify(o);
 
         return key;
+    };
+
+    var normaliseEl = function(el){
+        if(typeof el === "string"){
+            el = window.$ ? $(el) : document.querySelectorAll(el);
+        }
+
     };
 
     var RenderModel = Model.Class("BaseModel", {
@@ -237,12 +301,14 @@
             var _this = this;
             var Tmpl = Model._config.tmpl;
 
+            el = $(el);
+
             var callback = function(data){
                 if(_this.dead) return;
 
                 if(_this.cgiCount === 1) {
                     _this.onreset && _this.onreset();
-                    el.innerHTML = "";
+                    el.html("");
                 }
 
                 _this.info("start to process data");
@@ -309,17 +375,12 @@
                 callback(this.data);
             }
         },
-        active: function(){
+        active: function(e){
             //console.log("renderModel rocked");
             //if(! this.rendered){
                 //this.rendered = 1;
 
-                var el = this.el;
-                if(typeof el === "string"){
-                    el = window.$ ? $(el) : document.querySelector(el);
-                }
-
-                this.render(el, 1);
+                this.render(this.el, 1);
             //}
         },
 
@@ -423,7 +484,36 @@
 
 
             return clone;
+        },
+
+        feed: function(model){
+            model.feeded = 1;
+            this.feedPool.push(model);
+        },
+
+        unfeed: function(){
+        },
+
+        setFeedData: function(data, cgiCount) {
+            this.data = data;
+            this.cgiCount = cgiCount;
+        },
+
+        resetData: function(){
+            this.dataCache = [];
+            this.cgiCount = 0;
+
+            this.onreset && this.onreset();
+        },
+
+        show: function(){
+            $(this.el).show();
+        },
+
+        hide: function(){
+            $(this.el).hide();
         }
+
     });
 
     Model.external("RenderModel", RenderModel);

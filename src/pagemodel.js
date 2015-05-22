@@ -8,9 +8,21 @@
         // 激活对应的activeChild即可
         active: function(eventName){
             this.children.map(function(item){
-                if(item.status !== "active"){
+                if(item.status !== "active" && ! item.feeded){
                     item.rock(eventName);
                 }
+            });
+        },
+
+        show: function(){
+            this.children.map(function(item){
+                item.show();
+            });
+        },
+
+        hide: function(){
+            this.children.map(function(item){
+                item.hide();
             });
         },
 

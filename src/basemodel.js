@@ -188,8 +188,15 @@
             this.freezed = 0;
         },
 
+        show: function(){
+        },
+
+        hide: function(){
+        },
+
 
         extend: function(opt){
+            
         /*
             if (!opt) {
                 opt = {};

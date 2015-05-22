@@ -60,6 +60,14 @@
             this._initChild = indexOrChildModel;
         },
 
+        show: function(){
+            this.currChild.show();
+        },
+
+        hide: function(){
+            this.currChild.hide();
+        },
+
         // 如果不激活了 不激活相应当前child即可
         unactive: function(eventName){
             this.children.map(function(item){
