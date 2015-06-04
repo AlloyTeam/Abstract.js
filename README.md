@@ -64,4 +64,15 @@ page.add(intro);
 page.add(nav);
 page.rock();
 ```
+observe events
+```
+var intro = new RenderModel({
+    el: '.intro',
+    tmpl: 'Model.js'
+});
+
+intro.addEventListener("completed", function(e){
+     // do something
+});
+```
 ###Learn Abstract.js(comming soon)
