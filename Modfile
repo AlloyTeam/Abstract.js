@@ -2,8 +2,8 @@
 module.exports = {
     tasks:{
         cat:{
-            source:['src/sodarender.js', 'src/core.js', 'src/basemodel.js', 'src/relationmodel.js', 'src/pagemodel.js', 'src/mutexmodel.js', 'src/rendermodel.js', 'src/scrollmodel.js']
-            ,dest: 'combined/model.js'
+            source:[ 'src/sodarender.js', 'src/core.js', 'src/basemodel.js', 'src/relationmodel.js', 'src/pagemodel.js', 'src/mutexmodel.js', 'src/multitabmodel.js', 'src/rendermodel.js', 'src/scrollmodel.js']
+            ,dest: 'combined/model-2.0.js'
         },
         
         min: {

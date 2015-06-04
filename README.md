@@ -7,7 +7,8 @@ Abstract.js is a new and amazing framework for fast web development. It's the wo
 <br />But it's not enough just with the two base models, Abstract.js also offers the connction methods between the models to make it more convenient building the web world.
 * **Virtual DOM and Event Propagation:**Models refer to the Real Dom. Models construct Virtual DOM Tree with parent&child relationship and event propagation.
 * **Logical Abstracted:**Abstract Models are like ribs of the page. Many logical programmings are encapsulated, So you build your page fast.
-
+##Doc
+[Doc](doc.md)
 ##examples
 simple render model
 ```javascript

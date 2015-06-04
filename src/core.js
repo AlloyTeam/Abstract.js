@@ -36,6 +36,30 @@
         _lastMsg = args;
     };
 
+    var PrivateVar = function(value){
+        this._value = value;
+    };
+
+    PrivateVar.prototype = {
+        constructor: PrivateVar,
+        set: function(value){
+            this._value = value;;
+
+            return this;
+        },
+
+        get: function(){
+            return this.value;
+        },
+        set value(v){
+            console.warn("请使用set方法进行设置值的操作");
+        },
+
+        get value(){
+            return this._value;
+        },
+    };
+
     var Event = function(opt){
         this.bubble = true;
 
@@ -55,6 +79,7 @@
 
     var Model = {
         _config: {
+            debug: 0,
             ajax: function(opt){
                 if(window.$ && $.ajax){
                     $.ajax(opt);
@@ -180,9 +205,11 @@
                     if(_super){
                         this.super = _super.super;
 
-                        (_super[method] || function(){}).apply(this, args);
+                        var returnVal = (_super[method] || function(){}).apply(this, args);
 
                         this.super = _super;
+
+                        return returnVal;
                     }
                 };
             }
@@ -230,8 +257,150 @@
 
         addFuse: function(fuse, model){
             this.fuseMap[fuse] = model;
+        },
+
+        createPrivate: function(value){
+            return new PrivateVar(value);
+        },
+
+        // @todo
+        defer: function(){
+            var d = {
+                reject: function(data){
+                },
+
+                resolve: function(data){
+                }
+            };
+
+            d.promise = {
+                then: function(succFunc, ErrFunc){
+                }
+            };
+
+            return d;
         }
     };
+
+    var $ = window.$ || function(selector){
+            if(window.$){
+                return window.$(selector);
+            }
+
+            if(typeof selector === "object" && selector.show && selector.attr){
+                return selector;
+            }
+
+
+            var each = function(arr, func){
+                for(var i = 0; i < arr.length; i ++){
+                    var item = arr[i];
+
+                    func && func(item, i);
+                }
+            }
+
+            return function(){
+                var el;
+                if(typeof selector === "string"){
+                    if(selector === "window"){
+                        el = [window];
+                    }else{
+                        el = document.querySelectorAll(selector);
+                    }
+                }else{
+                    if(!('length' in el)){
+                        el = [el];
+                    }
+                }
+
+                var pro = {
+                    selector: selector,
+                    html: function(str){
+                        for(var i = 0; i < el.length; i ++){
+                            el[i].innerHTML = str;
+                        }
+                    },
+
+                    show: function(){
+                        for(var i = 0; i < el.length; i ++){
+                            var item = el[i];
+                            item.style.display == "none" && (item.style.display = '');
+
+                            if(getComputedStyle(item, '').getPropertyValue("display") == "none"){
+                                item.style.display = defaultDisplay(item.nodeName)
+                             }
+                        }
+                    },
+
+                    hide: function(){
+                        for(var i = 0; i < el.length; i ++){
+                            el[i].style.display = "none";
+                        }
+                    },
+
+                    on: function(name, selector, func){
+                        if(typeof func === "undefined"){
+                            each(el, function(item){
+                                item.addEventListener(name, selector);
+                            });
+                        }else{
+                            each(el, function(item){
+                                item.addEventListener(name, function(e){
+                                    var target = e.target;
+                                    var matchedEl = $(selector);
+
+                                    for(var i = 0; i < matchedEl.length; i ++){
+                                        var matchedElitem = matchedEl[i];
+
+                                        if(matchedElitem.contains(target)){
+                                            func && func.call(matchedElitem, e);
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    },
+
+                    attr: function(name, value){
+                        if(typeof value === "undefined"){
+                            return el && el[0] && el[0].getAttribute(name);
+                        }else{
+                            each(el, function(item){
+                                item.setAttribute(name, value);
+                            });
+                        }
+                    }
+                };
+
+                for(var i in pro){
+                    if(pro.hasOwnProperty(i)){
+                        el[i] = pro[i];
+                    }
+                }
+
+                return el;
+            }();
+    };
+
+    $.os = $.os || (function(){
+                        var ua = window.navigator.userAgent.toLowerCase();
+                        var androidFlag = 0;
+                        var iosFlag = 0;
+
+                        if(/android/.test(ua)){
+                            androidFlag = 1;
+                        }else if(/ios|iphone|ipad|ipod|itouch/.test(ua)){
+                            iosFlag = 1;
+                        }else{
+                        }
+
+                        return {
+                            ios: iosFlag,
+                            android: androidFlag
+                        };
+                    })();
+    Model.$ = $;
 
     Model.external("Model", Model);
 

@@ -21,47 +21,9 @@
 
         return elementDisplay[nodeName]
     };
-    var $ = window.$ || function(selector){
-            if(window.$){
-                return window.$(selector);
-            }
 
-            return function(){
-                var el;
-                if(typeof selector === "string"){
-                    el = document.querySelectorAll(selector);
-                }else{
-                    if(!('length' in el)){
-                        el = [el];
-                    }
-                }
+    var $ = Model.$;
 
-                return {
-                    html: function(str){
-                        for(var i = 0; i < el.length; i ++){
-                            el[i].innerHTML = str;
-                        }
-                    },
-
-                    show: function(){
-                        for(var i = 0; i < el.length; i ++){
-                            var item = el[i];
-                            item.style.display == "none" && (item.style.display = '');
-
-                            if(getComputedStyle(item, '').getPropertyValue("display") == "none"){
-                                item.style.display = defaultDisplay(item.nodeName)
-                             }
-                        }
-                    },
-
-                    hide: function(){
-                        for(var i = 0; i < el.length; i ++){
-                            el[i].style.display = "none";
-                        }
-                    }
-                };
-            }();
-    };
     var getKey = function(cgiName, param){
         var o = {};
 
@@ -126,11 +88,7 @@
             }
 
 
-            var opt = {
-                method: "POST",
-                url: this.url,
-                data: paramToReal,
-                success: function(res, isLocalRender){
+            var success = function(res, isLocalRender){
                    
                     // isLocalRender标记是从localStroage中取到的数据 直接执行回调
                     if(isLocalRender){
@@ -187,20 +145,35 @@
 
                     //执行回调
                     callback(res);
+                };
 
+                var opt = {
+                    method: "POST",
+                    url: this.url,
+                    data: paramToReal,
+                    success: function(res){
+                        success(res);
+                    },
 
-                },
+                    error: function(res){
+                        _this.info("ㄨerror request, with res↙");
+                        _this.info("   ", res);
 
-                error: function(res){
-                    _this.info("ㄨerror request, with res↙");
-                    _this.info("   ", res);
+                        _this.paramCache[_this.cgiCount] = param;
+                        _this.cgiCount ++;
 
-                    _this.paramCache[_this.cgiCount] = param;
-                    _this.cgiCount ++;
+                        _this.error && _this.error.call(_this, res, _this.cgiCount);
 
-                    _this.error && _this.error.call(_this, res, _this.cgiCount);
-                }
-            };
+                         
+                        var event = Model.createEvent({
+                            type: "errored",
+                            target: _this,
+                            name: 'anonymouse'
+                        });
+
+                        _this.dispatchEvent(event);
+                    }
+                };
 
 
             //使用预加载数据相关逻辑
@@ -245,7 +218,7 @@
                     try{
                         this.info("has localData");
                         this.info("    start localData rendering");
-                        opt.success(localData, 1);
+                        success(localData, 1);
                     }catch(e){
                     }
                 }
@@ -278,7 +251,7 @@
                         }
                     };
                 }else{
-                    opt.success(this.dataCache[_this.cgiCount]);
+                    success(this.dataCache[_this.cgiCount]);
                 }
             }
             //使用预加载数据模式的话，没有缓存也不发请求了，静待预加载数据返回即可
@@ -359,6 +332,15 @@
                 _this.isFirstDataRequestRender ++;
 
                 _this.info("complete render");
+
+ 
+                var event = Model.createEvent({
+                    type: "completed",
+                    target: _this,
+                    name: 'anonymouse'
+                });
+
+                _this.dispatchEvent(event);
             };
 
             if(this.url){
@@ -390,6 +372,9 @@
             this.feedPool = [];
 
             this.cgiCount = 0;
+            this.dataCache = [];
+
+            this.melt();
        },
 
 
@@ -403,7 +388,6 @@
 
             // 可被对象继承的属性
             this.paramCache = [];
-            this.dataCache = [];
 
             var _this = this;
 
@@ -428,40 +412,10 @@
         },
 
         extend: function(opt){
-            if (!opt) {
-                opt = {};
-            }
+            var clone = this.callSuperMethod('extend', opt);
 
-            var func = function() {};
-
-            var events = opt.events;
-
-            func.prototype = this; //object;
-
-            var clone = new func();
-
-            this._resetPrivateFlag.call(clone);
-
-            /*
-            clone.feedPool = [];
-            clone.cgiCount = 0;
-            clone.dataCache = [];
-            clone.isFirstDataRequestRender = 0;
-            clone.isFirstRender = 1;
-            clone._addedToModel = 0;
-            clone.canScrollInMTB = 1;
-            clone.dead = 0;
-            */
-
-            //如果重新定义了param 不使用缓存
-            if (opt.param) {
-                clone.paramCache = [];
-            }
-
-            for (var i in opt) {
-                clone[i] = opt[i];
-            }
-
+            var events = opt && opt.events;
+            
             //如果定义了事件 就不使用原来的事件
             if (events) {
                 clone.events = function() {
@@ -469,6 +423,10 @@
                 };
 
                 clone.eventsBinded = 0;
+            }
+
+            if(opt && opt.param){
+                clone.paramCache = [];
             }
 
             /*
@@ -506,13 +464,12 @@
             this.onreset && this.onreset();
         },
 
-        show: function(){
-            $(this.el).show();
-        },
+        update: function(data){
+            this.setData(data);
 
-        hide: function(){
-            $(this.el).hide();
+            this.rock();
         }
+
 
     });
 

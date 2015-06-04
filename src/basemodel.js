@@ -4,7 +4,9 @@
      * 如果父类有使用父类的属性 即是继承属性
      * 
      */
-    var acceptOpt = ['tmpl', 'el', 'data', 'fuse', 'myData', 'onreset'];
+    var $ = Model.$;
+
+    var acceptOpt = ['tmpl', 'el', 'data', 'fuse', 'myData', 'onreset', 'comment', 'helper'];
     var BaseModel = Model.Class({
         type: "BaseModel",
 
@@ -25,6 +27,14 @@
         get fuse(){
             return this._fuse;
         },
+
+        setData: function(data){
+            this.data = data;
+        },
+
+        addFuse: function(fuse){
+            this.fuse = fuse;
+        },
         constructor: function(opt){
             // private method
             // 这些都会被子类重新初始化一遍
@@ -43,6 +53,13 @@
             // 设置初始化参数 private method
             this.eventHandler = {
             };
+
+            this._ = {};
+
+            if(! this.hasOwnProperty('myData')){
+                this.myData = {};
+            }
+
 
             this.children = [];
             this.parent = null;
@@ -93,6 +110,8 @@
         // 并抛出激活事件
         // 这里triggerName
         rock: function(eventName){
+            var defer = Model.defer();
+
             console.log(this.el, "rocked");
             this.status = "active";
 
@@ -107,6 +126,7 @@
             this.active(event);
 
             this.dispatchEvent(event);
+
         },
 
         stop: function(eventName){
@@ -189,66 +209,82 @@
         },
 
         show: function(){
+            if(this.el){
+                $(this.el).show();
+            }
         },
 
         hide: function(){
+            if(this.el){
+                $(this.el).hide();
+            }
+        },
+
+        _resetPrivateFlag: function(){
+        },
+
+        _registerInnerMethod: function(arr, el){
+            for(var i = 0; i < arr.length; i ++){
+                var item = arr[i];
+
+                if(! this[item] || (this[item] && ! this.hasOwnProperty(item))){
+                    this[item] = function(item){
+                        return function(){
+                            return el[item].apply(el, arguments);
+                        };
+                    }(item);
+                }
+            }
         },
 
 
         extend: function(opt){
-            
-        /*
-            if (!opt) {
-                opt = {};
-            }
+            var func = function(){};
 
-            var func = function() {};
-
-            var events = opt.events;
-
-            func.prototype = this; //object;
+            func.prototype = this;
 
             var clone = new func();
 
-            clone.feedPool = [];
-            clone.cgiCount = 0;
-            clone.dataCache = [];
-            clone.isFirstDataRequestRender = 0;
-            clone.isFirstRender = 1;
-            clone._addedToModel = 0;
-            clone.canScrollInMTB = 1;
-            clone.dead = 0;
 
-            //如果重新定义了param 不使用缓存
-            if (opt.param) {
-                clone.paramCache = [];
-            }
+            this._resetPrivateFlag.call(clone);
 
-            for (var i in opt) {
+            for(var i in opt){
                 clone[i] = opt[i];
             }
 
-            //如果定义了事件 就不使用原来的事件
-            if (events) {
-                clone.events = function() {
-                    events && events.call(this);
-                };
+            clone.parent = null;
 
-                clone.eventsBinded = 0;
+            clone.children = [];
+
+            // 拷贝子元素
+            for(var i = 0; i < this.children.length; i ++){
+                clone.add(this.children[i].extend());
             }
 
-            if (clone.renderContainer) {
-
-                if (_containerCountInfo[clone.renderContainer]) {
-                    _containerCountInfo[clone.renderContainer]++;
-                } else {
-                    _containerCountInfo[clone.renderContainer] = 1;
-                }
-            }
-
+            // @todo
+            // 子元素间的feed关系还是要保留的
 
             return clone;
-            */
+            
+        },
+
+        getPrivate: function(name){
+            var _this = this;
+
+            var priKey = "_" + name;
+
+            pri = this._[priKey];
+        },
+
+        get: function(name){
+            var _this = this;
+            var priKey = "_" + name;
+
+            if(! _this._[priKey]){
+                _this._[priKey] = Model.createPrivate();
+            }
+
+            return _this._[priKey];
         }
 
     });

@@ -3,11 +3,25 @@
 <head>
 	<meta charset="UTF-8">
 	<title></title>
+  <style type="text/css">
+body > div{
+  border: 1px solid red;
+}
+
+.scroll{
+  height: 100px;
+  overflow: auto;
+}
+  </style>
 </head>
 <body>
 
+<div class='pshow'>pshow</div>
+<div class='p2show'>p2show</div>
+
 <div id="p"></div>
-<div id="p2"></div>
+<div id="p2" class="scroll"></div>
+<div id="p3"></div>
 	
 <script type="text/javascript" src="../src/sodarender.js"></script>
 <script type="text/javascript" src="../src/core.js"></script>
@@ -16,9 +30,15 @@
 <script type="text/javascript" src="../src/relationmodel.js"></script>
 <script type="text/javascript" src="../src/pagemodel.js"></script>
 <script type="text/javascript" src="../src/mutexmodel.js"></script>
+<script type="text/javascript" src="../src/scrollmodel.js"></script>
+<script type="text/javascript" src="../src/multitabmodel.js"></script>
 <script type="text/javascript">
 var t = new RenderModel({
-  comment: "OK",
+  comment: "t",
+
+  helper: {
+    a: '1'
+  },
   data: {
     list: [
       {name: 'a'},
@@ -44,10 +64,25 @@ var t = new RenderModel({
   
 });
 
-var t2 = new RenderModel({
-  comment: "OK",
+var t2 = new ScrollModel({
+  comment: "t2",
   data: {
     list: [
+      {name: 'a'},
+      {name: 'a'},
+      {name: 'a'},
+      {name: 'a'},
+      {name: 'a'},
+      {name: 'a'},
+      {name: 'a'},
+      {name: 'a'},
+      {name: 'a'},
+      {name: 'a'},
+      {name: 'a'},
+      {name: 'a'},
+      {name: 'a'},
+      {name: 'a'},
+      {name: 'a'},
       {name: 'a'},
       {name: 'b'}
     ]
@@ -56,6 +91,7 @@ var t2 = new RenderModel({
 myData: {
   type: 100
 },
+  scrollEl: "#p2",
   tmpl: "<div soda-repeat='item in list'>{{item.name}}</div>",
 
   el: '#p2',
@@ -74,7 +110,6 @@ myData: {
     bid: 1
   },
 
-  url: "data.php",
   events: function(){
      console.log('event binded');
   },
@@ -84,18 +119,41 @@ onreset: function(){
   
 });
 
-t.feed(t2);
+//t.feed(t2);
 
+var t3 = t2.extend({
+    comment: 't3',
+    el: "#p3"
+});
+
+/*
 var p = new PageModel();
 p.add(t);
 p.add(t2);
+p.add(t3);
+*/
 
-p.rock();
 
+var m = new MultitabModel();
+m.add(".pshow", t);
+m.add(".p2show", t2);
+
+m.initChild('.p2show');
+
+/*
+var l = p.extend();
+
+l.rock();
+*/
+
+m.rock();
+
+/*
 setTimeout(function(){
    t2.reset();
    t2.rock();
 }, 1000);
+*/
 </script>
 
 </body>
