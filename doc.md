@@ -1,11 +1,11 @@
-Puppet(OR Soda)
+Abstract.js
 ====
 
 前端框架，Front End Framework
 
 ##简介
 
-Puppet是基于逻辑层抽像的前端框架,致力于更高效,便捷,优雅的构建 开发复杂的前端工程.Puppet是基于MVC的传统架框方法,抽象所有的前端模型进行封装.
+Abstract是基于逻辑层抽像的前端框架,致力于更高效,便捷,优雅的构建 开发复杂的前端工程.Abstract是基于MVC的传统架框方法,抽象所有的前端模型进行封装.
 
 ##方法参考
 
