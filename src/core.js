@@ -62,6 +62,7 @@
 
     var Event = function(opt){
         this.bubble = true;
+        this.preventDefaulted = 0;
 
         this.type = opt.type || "";
         this.name = opt.name;
@@ -74,10 +75,30 @@
         
         stopPropagation: function(){
             this.bubble = false;
+        },
+
+        preventDefault: function(){
+            this.preventDefaulted = 1;
         }
     };
 
+
+    var loadJSContent = function(path, callback){
+        var xhr = new XMLHttpRequest();
+
+        xhr.onload = function(){
+            var data = this.response;
+
+            callback && callback(data);
+        };
+
+        xhr.open("GET", path, true);
+
+        xhr.send();
+    };
+
     var Model = {
+        containerCountInfo: {},
         _config: {
             debug: 0,
             ajax: function(opt){
@@ -113,7 +134,7 @@
                         }
                     };
 
-                    xhr.open(opt.method, opt.url, true);
+                    xhr.open(opt.type || 'POST', opt.url, true);
                     xhr.send(data);
                 }
             },
@@ -235,15 +256,9 @@
 
         },
 
-        trigger: function(eventName){
+        trigger: function(eventName, data){
             if(this.fuseMap[eventName]){
-                var event = this.createEvent({
-                    target: this.fuseMap[eventName],
-                    name: eventName,
-                    type: "actived"
-                });
-
-                this.fuseMap[eventName].rock(event);
+                this.fuseMap[eventName].rock(eventName, data);
             }
         },
 
@@ -279,6 +294,50 @@
             };
 
             return d;
+        },
+
+        // 异步加载文件配置
+        // {
+        //      tab1: ['../sdf../sdf.js','../sdf/sd.js']
+    //      }
+        loadModule: function(config){
+            this.loadModuleMap = config;
+        },
+
+        load: function(module, callback){
+            
+            if(this.loadModuleMap[module]){
+                var fileContentPool = [];;
+                var fileList = this.loadModuleMap[module];
+
+                var checkAndRunFile = function(){
+                    if(fileContentPool[0]){
+                        firstContent = fileContentPool.shift();
+
+                        var script = document.createElement("script");
+                        script.innerHTML = firstContent;
+
+                        document.body.appendChild(script);
+
+                        checkAndRunFile();
+                    }
+                };
+
+
+                for(var i = 0; i < fileList.length; i ++){
+                    var file = fileList[i];
+
+                    loadJSContent(file, function(i){
+                        return function(data){
+                            fileContentPool[i] = data;
+
+                            checkAndRunFile();
+                        };
+                    }(i));
+                }
+                
+            }else{
+            }
         }
     };
 

@@ -6,7 +6,9 @@
      */
     var $ = Model.$;
 
-    var acceptOpt = ['tmpl', 'el', 'data', 'fuse', 'myData', 'onreset', 'comment', 'helper'];
+    var _containerCountInfo = Model.containerCountInfo;
+
+    var acceptOpt = ['tmpl', 'el', 'data', 'fuse', 'myData', 'onreset', 'comment', 'helper', 'name'];
     var BaseModel = Model.Class({
         type: "BaseModel",
 
@@ -40,12 +42,32 @@
             // 这些都会被子类重新初始化一遍
             this._fuse = "";
 
+            var getId = function(){
+                return "abstract_" + ~~(100000 * Math.random()); 
+            };
+
             if(opt){
                 for(var i = 0; i < this.acceptOpt.length; i ++){
                     var item = this.acceptOpt[i];
                     if(opt[item]){
                         this[item] = opt[item];
                     }
+                }
+            }
+
+            if(opt && opt.el){
+                var id = $(opt.el).attr("id");
+
+                if(id){
+                }else{
+                    id = getId();
+                    $(opt.el).attr("id", id);
+                }
+
+                if(_containerCountInfo[id]){
+                    _containerCountInfo[id] ++;
+                }else{
+                    _containerCountInfo[id] = 1;
                 }
             }
 
@@ -72,10 +94,29 @@
 
         // 增加model上去
         add: function(model){
-            // add parent
-            model.parent = this;
+            if(typeof model === "string"){
+                if(model.indexOf(".")){
+                    var pos = model.lastIndexOf(".");
 
-            this.children.push(model);
+                    var moduleName = model.substr(0, pos);
+                    var name = model.substr(pos + 1);
+
+                    var loadModel = new LoadModel({
+                        moduleName: moduleName,
+                        name: name
+                    });
+
+                    // 将这种延时加载的模型增加进去
+                    this.children.push(model);
+                }else{
+                    console.warn("add load model error");
+                }
+            }else{
+                // add parent
+                model.parent = this;
+
+                this.children.push(model);
+            }
         },
 
         del: function(model){
@@ -94,6 +135,22 @@
             }
         },
 
+        replaceChild: function(model, newModel){
+             for(var i = 0; i < this.children.length; i ++){
+                if(this.children[i] === model){
+                    this.children[i] = newModel;
+
+                    break;
+                }
+            }
+
+            newModel.parent = this;
+
+            if(this.currChild === model){
+                this.currChild = newModel;
+            }
+        },
+
         // 这里写处于激活态的时候动作
         // 用户可自定义 
         // 事件传播不在这里处理保证不受用户处理事件传播
@@ -109,21 +166,37 @@
         // 这里的src始终是自己
         // 并抛出激活事件
         // 这里triggerName
-        rock: function(eventName){
+        rock: function(eventName, data){
+            var event = Model.createEvent({
+                type: "beforeactived",
+                target: this,
+                name: eventName || 'anonymouse', 
+                data: data
+            });
+
+            this.dispatchEvent(event);
+
+            if(event.preventDefaulted){
+                return;
+            }
+
+
             var defer = Model.defer();
 
             console.log(this.el, "rocked");
             this.status = "active";
 
  
-            var event = Model.createEvent({
-                type: "actived",
-                target: this,
-                name: eventName || 'anonymouse'
-            });
 
             // active时的动作
             this.active(event);
+
+            var event = Model.createEvent({
+                type: "actived",
+                target: this,
+                name: eventName || 'anonymouse', 
+                data: data
+            });
 
             this.dispatchEvent(event);
 
@@ -148,17 +221,17 @@
         // 事件传播
         // 事件由这里开始传播
         // 这里先只处理向上冒泡的情形
-        dispatchEvent: function(event){
+        dispatchEvent: function(event, data){
             var type = event.type;
 
             var _this = this;
             this.eventHandler[type] && this.eventHandler[type].map(function(item){
-                item.call(_this, event);
+                item.call(_this, event, data);
             });
 
             // 如果可以穿播 继续传播
             if(event.bubble){
-                this.parent && this.parent.dispatchEvent(event);
+                this.parent && this.parent.dispatchEvent(event, data);
             }
         },
 
@@ -182,6 +255,10 @@
         },
 
         reset: function(){
+            this.melt();
+
+            this.onreset && this.onreset();
+
             var event = Model.createEvent({
                 type: "reset",
                 target: this,
@@ -227,12 +304,30 @@
             for(var i = 0; i < arr.length; i ++){
                 var item = arr[i];
 
+
                 if(! this[item] || (this[item] && ! this.hasOwnProperty(item))){
-                    this[item] = function(item){
-                        return function(){
-                            return el[item].apply(el, arguments);
+                    Object.defineProperty(this, item, function(item){
+                        return {
+                            set: function(value){
+                                el[item] = value;
+                            },
+
+                            get: function(value){
+                                return el[item];
+                            }
                         };
+                    }(item));
+                    /*
+                    this[item] = function(item){
+                        if(typeof el[item] === "function"){
+                            return function(){
+                                return el[item].apply(el, arguments);
+                            };
+                        }else{
+                            return el[item];
+                        }
                     }(item);
+                    */
                 }
             }
         },
@@ -249,7 +344,9 @@
             this._resetPrivateFlag.call(clone);
 
             for(var i in opt){
-                clone[i] = opt[i];
+                if(opt[i]){
+                    clone[i] = opt[i];
+                }
             }
 
             clone.parent = null;
@@ -285,7 +382,84 @@
             }
 
             return _this._[priKey];
+        },
+
+        // 外放tab
+        exportTab: function(name, onswitch){
+             var key = "recieveModel" + name;
+
+            var realizeKey = "realizeModel" + name;
+            var _this = this;
+
+            if (window[key] && typeof window[key] === "function") {
+                //alert(selector); 
+                window[key](name, this, onswitch);
+            } else {
+                window[realizeKey] = function(cb) {
+                    cb(name, _this, onswitch);
+                    delete window[realizeKey];
+                };
+            }
+        },
+
+        tell: function(somebody, something, dowhat) {
+            var key = ["__", something, "__"].join("");
+
+            // 如相定义了某个属性
+            if (typeof this[something] !== "undefined") {
+                this[key] = this[something];
+            } else {}
+
+            Object.defineProperty(this, something, {
+                get: function() {
+                    return this[key];
+                },
+
+                set: function(val) {
+                    this[key] = val;
+
+                    if (dowhat) {
+                        dowhat.call(somebody, val);
+                    } else {
+                        somebody[something] = val;
+                    }
+                }
+            });
+
+        },
+
+        watch: function(somebody, something, dowhat) {
+            var key = ["__", something, "__"].join("");
+
+            // 如相定义了某个属性
+            if (typeof somebody[something] !== "undefined") {
+                somebody[key] = somebody[something];
+            } else {}
+
+            var _this = this;
+
+            Object.defineProperty(somebody, something, {
+                get: function() {
+                    return this[key];
+                },
+
+                set: function(val) {
+                    this[key] = val;
+
+                    if (dowhat) {
+                        dowhat.call(_this, val);
+                    } else {
+                        _this[something] = val;
+                    }
+                }
+            });
+
+        },
+
+        die: function(){
+            this.dead = 1;
         }
+
 
     });
 

@@ -143,9 +143,21 @@
 
     var ScrollModel = Model.Class("BaseModel", {
         type: "ScrollModel",
+
+        _resetPrivateFlag: function(){
+            this.get("rendered").set(0);
+        },
+
+        extend: function(opt){
+            var clone = this.callSuperMethod('extend', {scrollEl: this.scrollEl});
+
+            clone.renderModel = this.renderModel.extend(opt);
+
+            return clone;
+        },
         constructor: function(opt){
             //this.addAcceptOpt(['scrollEl']);
-            //this.callSuper(opt);
+            this.callSuper();
             this.scrollEl = opt.scrollEl || window;
 
             var scrollLock = this.get("scrollLock");
@@ -165,17 +177,22 @@
 
             this.addEventListener("scrollToBottom", function(e){
                 if(! scrollLock.value){
+                    scrollLock.set(1);
+
                     this.renderModel.rock();
 
                     e.stopPropagation();
 
-                    scrollLock.set(1);
                 }
+            });
+
+            this.addEventListener("beforeactived", function(e){
+                this.scrollEnable = 1;
             });
 
             // 以下方法调用元素方法
             
-            this._registerInnerMethod(['hide', 'show'], this.renderModel);
+            this._registerInnerMethod(['hide', 'show', 'feed', 'isFirstDataRequestRender', 'el', 'renderContainer', 'beforeRequest', 'freeze', 'melt', 'onreset'], this.renderModel);
 
 
         },
@@ -185,10 +202,6 @@
             var rendered = this.get("rendered");
 
             if(! rendered.value){
-
-
-                this.renderModel.rock();
-
                 // 加上去
                 scrollHelper.addModel(this);
 
@@ -196,7 +209,10 @@
                 rendered.set(1);
             }
 
-            this.scrollEnable = 1;
+            this.renderModel.reset();
+            this.renderModel.rock();
+
+
         },
         
         unactive: function(e){

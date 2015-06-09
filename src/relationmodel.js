@@ -12,6 +12,10 @@
 
         setUnactive: function(opt){
             this.onactive = opt;
+        },
+
+        get models(){
+            return this.children;
         }
         
     });

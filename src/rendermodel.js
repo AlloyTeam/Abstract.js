@@ -148,7 +148,7 @@
                 };
 
                 var opt = {
-                    method: "POST",
+                    type: this.method || "POST",
                     url: this.url,
                     data: paramToReal,
                     success: function(res){
@@ -208,7 +208,9 @@
 
                 localData = null;
                 try{
-                    localData = JSON.parse(window.localStorage.getItem(key) || "{}");
+                    if((window.localStorage.getItem(key) || '').trim()){
+                        localData = JSON.parse(window.localStorage.getItem(key) || "null");
+                    }
                 }catch(e){
                     
                 }
@@ -271,6 +273,11 @@
         },
 
         render: function(el, isReplace){
+            // 模型被冻结了 就不再进行渲染
+            if(this.freezed){
+                return;
+            }
+
             var _this = this;
             var Tmpl = Model._config.tmpl;
 
@@ -358,12 +365,9 @@
             }
         },
         active: function(e){
-            //console.log("renderModel rocked");
-            //if(! this.rendered){
-                //this.rendered = 1;
-
-                this.render(this.el, 1);
-            //}
+            if(! this.freezed){
+                this.render(this.el);
+            }
         },
 
        _resetPrivateFlag: function(){
@@ -374,12 +378,14 @@
             this.cgiCount = 0;
             this.dataCache = [];
 
+            this.isFirstDataRequestRender = 0;
+
             this.melt();
        },
 
 
        constructor: function(opt){
-            this.addAcceptOpt(['complete', 'processData', 'error', 'url', 'param', 'noCache', 'events', 'noRefresh']);
+            this.addAcceptOpt(['complete', 'processData', 'error', 'url', 'param', 'noCache', 'events', 'noRefresh', 'method', 'beforeRequest']);
             this.callSuper(opt);
 
             this._resetPrivateFlag();
@@ -391,24 +397,23 @@
 
             var _this = this;
 
-            this.addEventListener("reset", function(e){
-                if(e.target === this){
-                    this.cgiCount = 0;
-                    this.melt(); 
-                }
-            });
+        },
 
-            this.addEventListener("refresh", function(e){
-                if(e.target === this){
-                    if(this.noRefresh){
-                    }else{
-                        this.dataCache = [];
-                        this.reset();
-                        this.rock();
-                    }
-                }
-            });
+        reset: function(){
+            this.cgiCount = 0;
 
+            this.callSuperMethod("reset");
+        },
+
+        refresh: function(){
+            if(this.noRefresh){
+            }else{
+                this.dataCache = [];
+                this.reset();
+                this.rock();
+            }
+
+            this.callSuperMethod("refresh");
         },
 
         extend: function(opt){

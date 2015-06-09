@@ -5,7 +5,7 @@
              this.callSuper(opt);
 
             // 监听子元素的激活事件
-            this.addEventListener("actived", function(e){
+            this.addEventListener("beforeactived", function(e){
                 // 如果子元素是直属子元素 则处理其他子元素关系
                 var target = e.target;
 
@@ -85,6 +85,20 @@
                 this.currChild.stop(eventName);
             }
             */
+        },
+
+        refresh: function(){
+            if(this.currChild){
+                this.currChild.refresh();
+                this.callSuperMethod("refresh");
+            }
+        },
+
+        reset: function(){
+            if(this.currChild){
+                this.currChild.reset();
+                this.callSuperMethod("resest");
+            }
         }
     });
 

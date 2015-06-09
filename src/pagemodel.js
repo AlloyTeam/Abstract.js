@@ -8,7 +8,7 @@
         // 激活对应的activeChild即可
         active: function(eventName){
             this.children.map(function(item){
-                if(item.status !== "active" && ! item.feeded){
+                if(! item.feeded){
                     item.rock(eventName);
                 }
             });
@@ -43,6 +43,22 @@
                 this.currChild.stop(eventName);
             }
             */
+        },
+
+        refresh: function(){
+            this.children.map(function(item){
+                item.refresh();
+            });
+
+            this.callSuperMethod("refresh");
+        },
+
+        reset: function(){
+            this.children.map(function(item){
+                item.reset();
+            });
+
+            this.callSuperMethod("reset");
         }
     });
 
