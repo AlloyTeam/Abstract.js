@@ -358,6 +358,28 @@
                 clone.add(this.children[i].extend());
             }
 
+            // 把el记下
+            var getId = function(){
+                return "abstract_" + ~~(100000 * Math.random()); 
+            };
+
+            if(clone.el){
+                var id = $(clone.el).attr("id");
+
+                if(id){
+                }else{
+                    id = getId();
+                    $(clone.el).attr("id", id);
+                }
+
+                if(_containerCountInfo[id]){
+                    _containerCountInfo[id] ++;
+                }else{
+                    _containerCountInfo[id] = 1;
+                }
+            }
+
+
             // @todo
             // 子元素间的feed关系还是要保留的
 

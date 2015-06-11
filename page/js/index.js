@@ -14,14 +14,11 @@ var nav = new RenderModel({
     },
     tmpl: "<li soda-repeat='item in navList' onclick='switchNav(\"{{item.cn}}\")' class='{{item.cn}}'>{{item.name}}</li>",
     events: function(){
-        window.switchNav = function(name){
-            Model.trigger("." + name);
-        };
     }
 });
 
 
-var contentTab = new MutexModel();
+var contentTab = new MultitabModel();
 
 var content1 = new RenderModel({
     el: '.content',
@@ -48,14 +45,17 @@ var content3 = content1.extend({
     }
 });
 
-contentTab.add(content1);
-contentTab.add(content2);
+contentTab.add('._intro', content1);
+contentTab.add('._applacation', content2);
 
 
 var pageContent = new RenderModel({
     el: '.pageContent',
     url: 'data/pagedata.json',
     tmpl: "<li soda-repeat='item in list'>{{item.title}}<br />{{item.content}}</li>",
+    onreset: function(){
+        document.querySelector(".pageContent").innerHTML = "";
+    },
     processData: function(data){
         data = JSON.parse(data);
 

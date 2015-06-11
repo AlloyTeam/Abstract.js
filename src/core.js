@@ -5,6 +5,15 @@
 ;(function(){
     var originInfo = console.info;
     var originLog = console.log;
+    var rnotwhite = /\S+/g;
+    var classNameRegExp = function(className) {
+        return new RegExp('(^|\\s+)' + className + '(\\s+|$)', 'g');
+    };
+
+    var hasClass =  function(el, className) {
+        el.className.search(classNameRegExp(className)) !== -1;
+    };
+
 
     var _lastMsg = [];
     console.log = function(){
@@ -429,7 +438,30 @@
                                 item.setAttribute(name, value);
                             });
                         }
+                    },
+
+        
+                   addClass: function(classNames) {
+                        each(el, function (ele) {
+                            classNames.match(rnotwhite).forEach(function (cn) {
+                                if (!hasClass(ele, cn)) {
+                                    ele.className += ' ' + cn;
+                                }
+                            });
+                        });
+
+                        return this;
+                    },
+                    removeClass: function(classNames) {
+                        each(el, function (ele) {
+                            classNames.match(rnotwhite).forEach(function (cn) {
+                                ele.className = ele.className.replace(classNameRegExp(cn), ' ');
+                            });
+                        });
+
+                        return this;
                     }
+                    
                 };
 
                 for(var i in pro){

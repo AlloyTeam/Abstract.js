@@ -18,23 +18,27 @@
             this.mutexModel.addEventListener('beforeactived', function(e){
                 var smodel = e.target;
 
-                var id = $(smodel.el).attr("id");
+                if(smodel.parent == this){
 
-                if (containerCountInfo[id] > 1) {
-                    smodel.reset();
-                } else {
-                    // 如果请求过了
-                    if (smodel.isFirstDataRequestRender > 0) {
-                        smodel.show();
+                    var id = $(smodel.el).attr("id");
 
-                        e.preventDefault();
+                    if (containerCountInfo[id] > 1) {
+                        $(smodel.el).html("");
+                        smodel.reset();
                     } else {
+                        // 如果请求过了
+                        if (smodel.isFirstDataRequestRender > 0) {
+                            smodel.show();
+
+                            e.preventDefault();
+                        } else {
+                        }
+
                     }
 
+                    // 干涉渲染模型的激活态行为
+                    var target = e.target;
                 }
-
-                // 干涉渲染模型的激活态行为
-                var target = e.target;
             });
 
             var _this = this;
