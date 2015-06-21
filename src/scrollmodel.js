@@ -192,9 +192,17 @@
 
             // 以下方法调用元素方法
             
-            this._registerInnerMethod(['hide', 'show', 'feed', 'isFirstDataRequestRender', 'el', 'renderContainer', 'beforeRequest', 'freeze', 'melt', 'onreset'], this.renderModel);
+            this._registerInnerMethod(['hide', 'show', 'feed', 'isFirstDataRequestRender', 'el', 'renderContainer', 'beforeRequest', 'freeze', 'melt', 'onreset',  'reset', 'url', 'data', 'cgiCount'], this.renderModel);
 
 
+        },
+
+        refresh: function(){
+            this.reset();
+            this.renderModel.dataCache = [];
+            this.renderModel.reset();
+
+            this.rock();
         },
 
         active: function(e){
@@ -209,7 +217,7 @@
                 rendered.set(1);
             }
 
-            this.renderModel.reset();
+            //this.renderModel.reset();
             this.renderModel.rock();
 
 

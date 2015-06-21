@@ -110,6 +110,7 @@
         containerCountInfo: {},
         _config: {
             debug: 0,
+            multitab_event: "click",
             ajax: function(opt){
                 if(window.$ && $.ajax){
                     $.ajax(opt);
@@ -178,11 +179,19 @@
             localKeyExclude: []
         },
         config: function(opt){
+            for(var i in opt){
+                if(opt.hasOwnProperty(i) && opt[i]){
+                    this._config[i] = opt[i];
+                }
+            }
+
+            /*
             if(opt.ajax){
                 this._config.ajax = opt.ajax;
             }
 
             this._config.tmpl = opt.tmpl;
+            */
         },
         fuseMap: {
         },
@@ -314,6 +323,11 @@
         },
 
         load: function(module, callback){
+            if(Model._config.loadModule){
+                Model._config.loadModule(module, callback);
+
+                return;
+            }
             
             if(this.loadModuleMap[module]){
                 var fileContentPool = [];;

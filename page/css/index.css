@@ -1,0 +1,89 @@
+html,body{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(173, 173, 173);
+    font-family: microsoft yahei light,microsoft yahei;
+    font-weight: 100;
+}
+
+.banner {
+    color: #fff;
+    text-align: center;
+    font-size: 47px;
+    line-height: 20px;
+    padding-top: 360px;
+    text-shadow: 0 0 11px rgba(86, 86, 86, 0.99);
+}
+
+.intro {
+    font-size: 16px;
+    margin-top: 27px;
+}
+
+.learnMore {
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+.go {
+    background: url(image/go.png) no-repeat;
+    height: 50px;
+    width: 50px;
+    margin: 0 auto;
+    background-size: 100%;
+    background-position: 0px 0px;
+    margin-top: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: 74px;
+    margin-left: -25px;
+}
+@keyframes flash{
+    0%{
+        box-shadow: 0 0 0px 2px rgb(199, 172, 68);
+        transform: scale(0.7);
+    }
+
+    50%{
+        box-shadow: 0 0 2px 2px rgb(255, 221, 89);
+        transform: scale(0.78);
+    }
+
+    100%{
+        box-shadow: 0 0 0px 2px rgb(199, 172, 68);
+        transform: scale(0.7);
+    }
+
+}
+
+.flash{
+    animation: flash 2.5s cubic-bezier(0.4, 0, 1, 1) infinite;
+}
+
+
+.page1 {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+canvas#canvas {
+    width: 400px;
+    height: 300px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -150px;
+}
+
+.fade {
+    left: 60%;
+    opacity: 0;
+    transition: cubic-bezier(0.02, 0.64, 1, 1) 0.7s all;
+}

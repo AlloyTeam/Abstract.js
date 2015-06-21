@@ -2,24 +2,30 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title></title>
+	<title>Abstract.js</title>
+  <link media="all" rel="stylesheet" href="css/index.css" type="text/css" />
 </head>
 <body>
 
-<div class="intro">
+<div class="page1">
+  <canvas id="canvas"></canvas>
+  <div class='go flash' id='go'></div>
 </div>
 
-<ul class="nav"></ul>
+<script type="text/javascript" src="js/abstract-2.0.js"></script>
+<script type="text/javascript" src="js/bo.js"></script>
 
-<div class="content">
-</div>
+<script type="text/javascript">
 
-<ul class="pageContent">
-</ul>
+document.getElementById("go").onclick = function(){
+    this.addEventListener("transitionend", function(){
+      bo.bang();
+    });
 
-<ul class="pages"></ul>
+    this.className += " fade";
 
-<script type="text/javascript" src="js/model-2.0.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
+    //bo.bang();
+};
+</script>
 </body>
 </html>

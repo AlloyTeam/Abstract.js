@@ -121,6 +121,7 @@
         containerCountInfo: {},
         _config: {
             debug: 0,
+            multitab_event: "click",
             ajax: function(opt){
                 if(window.$ && $.ajax){
                     $.ajax(opt);
@@ -189,11 +190,19 @@
             localKeyExclude: []
         },
         config: function(opt){
+            for(var i in opt){
+                if(opt.hasOwnProperty(i) && opt[i]){
+                    this._config[i] = opt[i];
+                }
+            }
+
+            /*
             if(opt.ajax){
                 this._config.ajax = opt.ajax;
             }
 
             this._config.tmpl = opt.tmpl;
+            */
         },
         fuseMap: {
         },
@@ -325,6 +334,11 @@
         },
 
         load: function(module, callback){
+            if(Model._config.loadModule){
+                Model._config.loadModule(module, callback);
+
+                return;
+            }
             
             if(this.loadModuleMap[module]){
                 var fileContentPool = [];;
@@ -822,7 +836,13 @@
                             },
 
                             get: function(value){
-                                return el[item];
+                                if(typeof el[item] === "function"){
+                                    return function(){
+                                        return el[item].apply(el, arguments);
+                                    };
+                                }else{
+                                    return el[item];
+                                }
                             }
                         };
                     }(item));
@@ -1212,7 +1232,7 @@
             this.mutexModel.addEventListener('beforeactived', function(e){
                 var smodel = e.target;
 
-                if(smodel.parent == this){
+                //if(smodel.parent == this){
 
                     var id = $(smodel.el).attr("id");
 
@@ -1232,16 +1252,19 @@
 
                     // 干涉渲染模型的激活态行为
                     var target = e.target;
-                }
+                //}
             });
 
             var _this = this;
-            this.addEventListener("beforeswitched", function(e){
+            this.addEventListener("beforeswitched", function(e, data){
+
+            console.log(data);
                 var model = _this.mutexModel.currChild;
 
                 var switchType = e.name;
 
-                var selector;
+                var selector = (data && data.selector) || '';
+                /*
                 for(var i in _this.selectorMap){
                     if(_this.selectorMap[i] === model){
                         selector = i;
@@ -1250,6 +1273,7 @@
                     }
 
                 } 
+                */
 
                 
                 if(selector){
@@ -1398,12 +1422,12 @@
             var fuse = "multitab_" + selector;
 
             // 切换事件绑定
-            $("body").on("click", selector, function(){
+            $("body").on(Model._config.multitab_event, selector, function(){
                 _this.dispatchEvent(Model.createEvent({
                     type: "beforeswitched",
                     target: _this,
                     name: "switch"
-                }));
+                }), {selector: selector});
 
                 Model.trigger(fuse, 'switch');
 
@@ -1645,32 +1669,37 @@
 
 
             //如果是第一次渲染，且cgi也还没有发送请求 那么 使用缓存中数据
-            if(!_this.noCache && _this.cgiCount == 0){
-                
-                var key = (_this.cacheKey || getKey)(this.url, paramToReal);
+            if(!_this.noCache && _this.cgiCount == 0 && ! _this.isFirstRender){
+                // 如果有数据了 就不再走缓存了 直接进行第一次渲染
+                // 但是prefreching或者其他provider在请求的时候还是要使用缓存
+                var dataCache = this.dataCache[_this.cgiCount];
 
-                localData = null;
-                try{
-                    if((window.localStorage.getItem(key) || '').trim()){
-                        localData = JSON.parse(window.localStorage.getItem(key) || "null");
-                    }
-                }catch(e){
-                    
-                }
+                if(! dataCache || dataCache === "@prefetching"){
+                    var key = (_this.cacheKey || getKey)(this.url, paramToReal);
 
-                if(localData){
-
+                    localData = null;
                     try{
-                        this.info("has localData");
-                        this.info("    start localData rendering");
-                        success(localData, 1);
+                        if((window.localStorage.getItem(key) || '').trim()){
+                            localData = JSON.parse(window.localStorage.getItem(key) || "null");
+                        }
                     }catch(e){
+                        
                     }
+
+                    if(localData){
+
+                        try{
+                            this.info("has localData");
+                            this.info("    start localData rendering");
+                            success(localData, 1);
+                        }catch(e){
+                        }
+                    }
+
+                    _this.isFirstRender = 0;
+
+                    this.localData = localData;
                 }
-
-                _this.isFirstRender = 0;
-
-                this.localData = localData;
 
             }
 
@@ -1686,7 +1715,7 @@
 
             // 如果缓存中有数据 使用缓存数据 否则发送请求
             if(this.dataCache[_this.cgiCount]){
-                if(this.dataCache[_this.cgiCount] === "@prefeching"){
+                if(this.dataCache[_this.cgiCount] === "@prefetching"){
                     this.dataCache[_this.cgiCount] = function(isError){
 
                         if(! isError){
@@ -1796,6 +1825,10 @@
             if(this.url){
                 this.getData(callback);
             }else{
+                if(this.cgiCount === 0){
+                    this.cgiCount ++;
+                }
+
                 if(this.data){
                 }else{
                     this.data = {};
@@ -1821,6 +1854,8 @@
             this.cgiCount = 0;
             this.dataCache = [];
 
+            this.isFirstRender = 0;
+
             this.isFirstDataRequestRender = 0;
 
             this.melt();
@@ -1828,8 +1863,16 @@
 
 
        constructor: function(opt){
-            this.addAcceptOpt(['complete', 'processData', 'error', 'url', 'param', 'noCache', 'events', 'noRefresh', 'method', 'beforeRequest']);
+            this.addAcceptOpt(['complete', 'processData', 'error', 'url', 'param', 'noCache', 'events', 'noRefresh', 'method', 'beforeRequest', 'cacheKey']);
             this.callSuper(opt);
+
+            
+            if (this.cacheKey && typeof this.cacheKey !== "function") {
+                this.cacheKey = function() {
+                    return opt.cacheKey || "";
+                };
+            }
+
 
             this._resetPrivateFlag();
 
@@ -1839,6 +1882,60 @@
             this.paramCache = [];
 
             var _this = this;
+
+
+           // prefetch
+           if (this.prefetch) {
+                try {
+                    // 如果之前有发过请求，则使用缓存的参数池中对应的参数，否则使用param方法构造参数
+                    var param = (typeof this.param === "object" && this.param) || this.param.call(this);
+
+                    this.paramCache[0] = param;
+
+                    var _this = this;
+
+                    var ajaxOpt = {
+                        url: this.url,
+                        param: param,
+                        type: this.method || "POST",
+                        ssoCmd: this.ssoCmd,
+                        success: function(res) {
+                            if (typeof _this.dataCache[0] === "function") {
+                                var fun = _this.dataCache[0];
+
+                                _this.dataCache[0] = res;
+                                fun();
+                            } else {
+                                _this.dataCache[0] = res;
+                            }
+                        },
+
+                        error: function(res) {
+                            if (typeof _this.dataCache[0] === "function") {
+                                var fun = _this.dataCache[0];
+
+                                _this.dataCache[0] = res;
+                                fun('error');
+                            } else {
+                                _this.dataCache[0] = null;
+                            }
+                        }
+                    };
+
+                    var defer = this.beforeRequest && this.beforeRequest();
+
+                    if (typeof defer === "boolean" && !defer) {
+                        return;
+                    }
+
+                    Model._config.ajax(ajaxOpt);
+
+                    this.dataCache[0] = "@prefetching";
+                } catch (e) {
+                    this._prefetchError = 1;
+                }
+
+           }
 
         },
 
@@ -1916,6 +2013,18 @@
             this.setData(data);
 
             this.rock();
+        },
+
+        setData: function(cgiCount, data){
+            this.dataCache[cgiCount] = data;
+        },
+
+        getCache: function(cgiCount){
+            if (cgiCount === 0) {
+                return this.localData;
+            } else {
+                return this.dataCache[cgiCount - 1];
+            }
         }
 
 
@@ -2117,9 +2226,17 @@
 
             // 以下方法调用元素方法
             
-            this._registerInnerMethod(['hide', 'show', 'feed', 'isFirstDataRequestRender', 'el', 'renderContainer', 'beforeRequest', 'freeze', 'melt', 'onreset'], this.renderModel);
+            this._registerInnerMethod(['hide', 'show', 'feed', 'isFirstDataRequestRender', 'el', 'renderContainer', 'beforeRequest', 'freeze', 'melt', 'onreset',  'reset', 'url', 'data', 'cgiCount'], this.renderModel);
 
 
+        },
+
+        refresh: function(){
+            this.reset();
+            this.renderModel.dataCache = [];
+            this.renderModel.reset();
+
+            this.rock();
         },
 
         active: function(e){
@@ -2134,7 +2251,7 @@
                 rendered.set(1);
             }
 
-            this.renderModel.reset();
+            //this.renderModel.reset();
             this.renderModel.rock();
 
 
@@ -2232,10 +2349,73 @@
 
     Model.external("LoadModel", LoadModel);
 })();
+
 ;(function(){
     var LinkModel = Model.Class("BaseModel", {
+        type: "LinkModel",
         constructor: function(opt){
+            this.addAcceptOpt(['popBack', 'checkBack', 'newWindow']);
             this.callSuper(opt);
+        },
+
+        _popBack: function(){
+            window.history.back();
+        },
+
+        _openUrl: function(url, isNewWindow){
+            if(isNewWindow){
+                window.open(url, "_blank");
+            }else{
+                window.location = url;
+            }
+        },
+
+        active: function(e){
+            var query = "";
+            var param = this.param;
+
+            if (typeof this.param === "function") {
+                param = this.param.call(this);
+            }
+
+            if (this.popBack) {
+                this._popBack();
+            }
+
+            if (param) {
+                var tmp = [];
+
+                for (var i in param) {
+                    tmp.push(i + '=' + (param[i] || ""));
+                }
+
+                query = tmp.join("&");
+            }
+
+            var url;
+
+            if (query) {
+                url = this.url + "?" + query;
+            } else {
+                url = this.url;
+            }
+
+            if (url) {
+                if (this.checkBack) {
+                    var referer = document.referrer;
+
+                    if (referer.indexOf(this.url) > -1) {
+                        history.back();
+                        return;
+                    } else {}
+                }
+
+                if (this.newWindow) {
+                    this._openUrl(url, true);
+                } else {
+                    this._openUrl(url);
+                }
+            }
         }
     });
 

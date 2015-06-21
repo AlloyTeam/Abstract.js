@@ -18,7 +18,7 @@
             this.mutexModel.addEventListener('beforeactived', function(e){
                 var smodel = e.target;
 
-                if(smodel.parent == this){
+                //if(smodel.parent == this){
 
                     var id = $(smodel.el).attr("id");
 
@@ -38,16 +38,19 @@
 
                     // 干涉渲染模型的激活态行为
                     var target = e.target;
-                }
+                //}
             });
 
             var _this = this;
-            this.addEventListener("beforeswitched", function(e){
+            this.addEventListener("beforeswitched", function(e, data){
+
+            console.log(data);
                 var model = _this.mutexModel.currChild;
 
                 var switchType = e.name;
 
-                var selector;
+                var selector = (data && data.selector) || '';
+                /*
                 for(var i in _this.selectorMap){
                     if(_this.selectorMap[i] === model){
                         selector = i;
@@ -56,6 +59,7 @@
                     }
 
                 } 
+                */
 
                 
                 if(selector){
@@ -204,12 +208,12 @@
             var fuse = "multitab_" + selector;
 
             // 切换事件绑定
-            $("body").on("click", selector, function(){
+            $("body").on(Model._config.multitab_event, selector, function(){
                 _this.dispatchEvent(Model.createEvent({
                     type: "beforeswitched",
                     target: _this,
                     name: "switch"
-                }));
+                }), {selector: selector});
 
                 Model.trigger(fuse, 'switch');
 

@@ -57,7 +57,7 @@ var pageContent = new RenderModel({
         document.querySelector(".pageContent").innerHTML = "";
     },
     processData: function(data){
-        data = JSON.parse(data);
+        //data = JSON.parse(data);
 
         return data;
     }

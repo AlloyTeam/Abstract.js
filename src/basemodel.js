@@ -313,7 +313,13 @@
                             },
 
                             get: function(value){
-                                return el[item];
+                                if(typeof el[item] === "function"){
+                                    return function(){
+                                        return el[item].apply(el, arguments);
+                                    };
+                                }else{
+                                    return el[item];
+                                }
                             }
                         };
                     }(item));
