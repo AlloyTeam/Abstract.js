@@ -47,14 +47,13 @@ var bo = {
     var width = this.imgData.width;
     var height = this.imgData.height;
 
-       // 计算有点的位置
        for(var y = 0; y < height; y ++){
             for(var x = 0; x < width; x ++){
 
                 var i = (y * width + x) * 4;
                 
                 if(data[i] + data[i + 1] + data[i + 2] + data[i + 3] > 0){
-                    hasInfoDot.push([x, y, data[i], data[i + 1], data[i + 2], data[i + 3]]);
+                    hasInfoDot.push([x, y]);
                 }
             }
         }
@@ -88,23 +87,19 @@ var bo = {
 
         var newData = newImgData.data;
 
-        var calDot = function(x, y, ox, oy){
-            /*
+        var calDot = function(x, y){
             var theat = Math.random() * Math.PI * 2;
-            var t = 10;
+            var t = 2;
             var newX = x + t * Math.cos(theat);
             //var newX = x;
             var newY = y + t * Math.sin(theat);
             return [Math.round(newX), Math.round(newY)];
-            */
-
-            var newX = x + Math.random() * 2 - 1;
-            var newY = y + Math.random() * (maxY - oy) / 4;
-
-            return [Math.round(newX), Math.round(newY)];
         };
 
         var copy = function(oldDot, newDot){
+            var x = oldDot[0];
+            var y = oldDot[1];
+
             var newX = newDot[0];
             var newY = newDot[1];
 
@@ -112,12 +107,13 @@ var bo = {
                 return;
             }
 
+            var i = (y * width + x) * 4;
             var newI = (newY * width + newX) * 4;
 
-            newData[newI] = dot[2];
-            newData[newI + 1] =  dot[3];
-            newData[newI + 2] = dot[4];
-            newData[newI + 3] =  dot[5];
+            newData[newI] = 255 || data[i];
+            newData[newI + 1] = 255 || data[i + 1];
+            newData[newI + 2] = 0;//data[i + 2];
+            newData[newI + 3] = -- data[i + 3];
             
         };
 
@@ -136,15 +132,10 @@ var bo = {
         }
         */
 
-        var maxY = 130 + (timeCount / 2);
-        // 从下往上扫
-        for(var d = this.hasInfoDot.length - 1; d > - 1; d --){
+        for(var d = 0; d < this.hasInfoDot.length; d ++){
             var dot = this.hasInfoDot[d];
             var x = dot[0];
             var y = dot[1];
-            var originY = y;
-            var originX = x;
-
 
             // 找出现在点对应的x,y
             var mapId = [x, y].join("_");
@@ -160,28 +151,19 @@ var bo = {
             }else{
             }
 
-            if(y > height){
-                continue;
-            }
-
             // 计算新的x,y，并加入进去
-            var xy;
-            if(originY > maxY){
-                xy = [originX, originY];
-            }else{
-                xy = calDot(x, y, originX, originY);
-            }
-
+            var xy = calDot(x, y);
             this.infoDotCurrDotMap[mapId] = xy;
 
             var newX = xy[0];
             var newY = xy[1];
 
-            //复制操作
-            copy(dot, xy);
-            //copy(dot, [newX, newY + 1]);
-            //copy(dot, [newX, newY - 1]);
-            
+            //复制
+            copy([x, y], xy);
+            copy([x, y], [newX, newY - 1]);
+            copy([x, y], [newX, newY + 1]);
+            copy([x, y], [newX - 1, newY]);
+            copy([x, y], [newX + 1, newY]);
         }
 
         this.ctx.putImageData(newImgData, 0, 0);

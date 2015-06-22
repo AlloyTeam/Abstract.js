@@ -18,8 +18,13 @@
 <script type="text/javascript">
 
 document.getElementById("go").onclick = function(){
+    var runed = 0;
     this.addEventListener("transitionend", function(){
-      bo.bang();
+      if(! runed){
+        bo.bang();
+
+        runed = 1;
+      }
     });
 
     this.className += " fade";
