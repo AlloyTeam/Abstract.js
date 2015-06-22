@@ -7,15 +7,103 @@
 </head>
 <body>
 
-<div class="page1">
+<div class="page page1">
   <canvas id="canvas"></canvas>
   <div class='go flash' id='go'></div>
+</div>
+
+<div class="page page2">
+  <div class="header">Abstract.js</div>
+  <div class="intro">Abstract.js is a framework; Abstract.js concerns about the logic rather than view changing</div>
+  <div class="using">
+    <h2>Who Are Using Abstract?</h2>
+    <div>
+      <span>QQ Tribes</span>
+      <span>QQ Group Activities For PC/Mobile</span>
+      <span>More of You...</span>
+    </div>
+  </div>
+  <div class="exam">
+    <h2>Simple RenderModel</h2>
+    <div class="des">
+      RenderModel is Using for Rendering Page Blocking;Here is a sample for RenderModel;
+    </div>
+
+
+    <pre>
+    var header = new RenderModel({
+      el: ".header",
+      url: "/cgi/headerData",
+      processData: function(data){
+      },
+
+      template: "&lt;li soda-repeat='item in list'>{{item.name}}&lt;/li>"
+    });
+
+    header.rock();
+    </pre>
+
+    <h2>Simple ScrollModel</h2>
+    <div class="des">
+      ScrollModel is Using for Rendering Blockings which loads more content when users pull down list to the bottom.
+    </div>
+    <pre>
+    var header = new ScrollModel({
+      el: ".list",
+      scrollEl: ".list",
+      url: "/cgi/headerData",
+      processData: function(data){
+      },
+
+      template: "&lt;li soda-repeat='item in list'>{{item.name}}&lt;/li>"
+    });
+
+    header.rock();
+    </pre>
+
+    <h2>PageModel</h2>
+    <div class="des">
+      PageModel is one of Relationship Model, which tells the relationship between models; 
+    </div>
+
+    <h2>MultitabModel</h2>
+    <div class="des">
+      MultitabModel is one of Relationship Model, which tells the relationship between models;
+    </div>
+
+    <pre>
+      var tab1 = new RenderModel();
+      var tab2 = new RenderModel();
+
+      var tab = new MultitabModel();
+
+      tab.add(".tab1", tab1);
+      tab.add(".tab2", tab2);
+
+      tab.rock();
+    </pre>
+  </div>
 </div>
 
 <script type="text/javascript" src="js/abstract-2.0.js"></script>
 <script type="text/javascript" src="js/bo.js"></script>
 
 <script type="text/javascript">
+var handler = function(){
+  var hash = window.location.hash;
+  if(hash === "#doc"){
+      document.body.className += "doc";
+  }
+};
+
+window.onhashchange = handler;
+
+handler();
+
+bo.init("Abstract.js", "The Next Framework For Web", function(){
+    window.location.hash ="doc";
+    //document.body.className += "doc";
+});
 
 document.getElementById("go").onclick = function(){
     var runed = 0;

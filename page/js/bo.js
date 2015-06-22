@@ -47,6 +47,8 @@ var bo = {
     var width = this.imgData.width;
     var height = this.imgData.height;
 
+    var maxOriginY = 0;
+
        // 计算有点的位置
        for(var y = 0; y < height; y ++){
             for(var x = 0; x < width; x ++){
@@ -55,28 +57,44 @@ var bo = {
                 
                 if(data[i] + data[i + 1] + data[i + 2] + data[i + 3] > 0){
                     hasInfoDot.push([x, y, data[i], data[i + 1], data[i + 2], data[i + 3]]);
+
+                    if(maxOriginY < y){
+                        maxOriginY = y;
+                    }
                 }
             }
         }
 
         this.hasInfoDot = hasInfoDot;
         this.infoDotCurrDotMap = infoDotCurrDotMap;
+        this.maxOriginY = maxOriginY;
 
 
         var _this = this;
         var timeCount = 0;
         var render = function(){
+            if(! _this.stopped){
+
             timeCount ++;
             _this.step(timeCount);
 
             _this.imgData = _this.ctx.getImageData(0, 0, _this.canvas.width, _this.canvas.height);
 
-            requestAnimFrame(function(){
-                render();
-            });
+                requestAnimFrame(function(){
+                    render();
+                });
+            }
         };
 
         render();
+    },
+
+    stop: function(){
+        if(! this.stopped){
+            this.callback && this.callback();
+        }
+        this.stopped = 1;
+        
     },
 
     step: function(timeCount){
@@ -182,14 +200,20 @@ var bo = {
             //copy(dot, [newX, newY + 1]);
             //copy(dot, [newX, newY - 1]);
             
+            if(originY >= this.maxOriginY){
+                if(newY > height){
+                    this.stop();
+                }
+            }
         }
 
         this.ctx.putImageData(newImgData, 0, 0);
     },
 
-    init: function(word, introWord){
+    init: function(word, introWord, callback){
         this.word = word;
         this.introWord = introWord;
+        this.callback = callback;
 
         this.canvas = document.getElementById("canvas");
         this.ctx = this.canvas.getContext("2d");
@@ -201,4 +225,3 @@ var bo = {
 
     }
 };
-bo.init("Abstract.js", "The Next Framework For Web");
