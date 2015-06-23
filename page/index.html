@@ -19,8 +19,10 @@
   <div class="intro">
     <div class="wrapper">
       <h1><span class="logo"></span>Abstract 2.0</h1>
+      <div class="subtitle">Rock Yourself In Mess Code</div>
       <div class="download">
         <div class="btn">download 2.0 Now</div>
+        <div class="btn btn-red">Start Rocking</div>
       </div>
 
     </div>
@@ -120,6 +122,7 @@
       
       <h2>Listing</h2>
       <div class="des">
+        <div>Try scrolling to bottom</div>
       	<div class="examintro">
       		<pre>
       var listing = new ScrollModel({
@@ -341,8 +344,89 @@ page.rock();
           </ul>
         </div>
       </div>
+
+      <h2>Higher Level Usage</h2>
+      <h2>Dialog</h2>
+
+      <div class="des">
+        <div class="examintro">
+          <pre>
+// dialog
+var dialogRender = new RenderModel({
+  data: {
+    title: "Dialog",
+    content: "Abstact publishes Version 2.0"
+  },
+  fuse: Model.createFuse("click", "#showDialog"),
+
+  el: ".dialogWrapper",
+  tmpl: "&lt;h2>{{title}}&lt;span class='close'>close&lt;/span>&lt;/h2>&tl;div class='dialogContent'>{{content}}&lt;/div>"
+});
+
+dialogRender.addEventListener("beforeactived", function(){
+    document.querySelector(".dialogWrapper").innerHTML = "";
+    this.show();
+});
+
+dialogRender.addEventListener("unactived", function(){
+    this.hide();
+});
+
+
+var closeModel = new BaseModel({
+    fuse: Model.createFuse("click", ".close")
+});
+
+var controller = new MutexModel();
+controller.add(closeModel);
+controller.add(dialogRender);
+
+controller.rock();
+
+          </pre>
+        </div>
+        <div class="codePlay">
+          <div class="dialogWrapper"></div>
+          <div class="btn" id="showDialog">Show Dialog</div>
+        </div>
+      </div>
+      <h2>Dialog(Using MultitabModel, less code)</h2>
+
+      <div class="des">
+        <div class="examintro">
+          <pre>
+// dialog
+var dialogRender2 = new RenderModel({
+  data: {
+    title: "Dialog",
+    content: "Abstact publishes Version 2.0"
+  },
+
+  el: ".dialogWrapper2",
+  tmpl: "&lt;h2>{{title}}&lt;span class='close2'>close&lt;/span>&lt;/h2>&lt;div class='dialogContent'>{{content}}&lt;/div>"
+});
+
+
+var closeModel2 = new BaseModel({
+});
+
+var controller2 = new MultitabModel();
+controller2.add(".close2", closeModel2);
+controller2.add("#showDialog2", dialogRender2);
+
+controller2.rock();
+
+          </pre>
+        </div>
+        <div class="codePlay">
+          <div class="dialogWrapper2"></div>
+          <div class="btn" id="showDialog2">Show Dialog</div>
+        </div>
+      </div>
+
+
       <h2>Abstract is not MVVM Framework, but also Abstract can construct MVVM logics as well. <br />
-        But Abstract concerns about the logic about Datas, not the views.
+        But Abstract concerns about the logic about datas, not the views.
       </h2>
       <h2>To Do</h2>
       <div class="des">
@@ -387,23 +471,25 @@ todoList.rock();
       <div class="des">
         <div class="examintro">
           <pre>
+
 var markdown = new RenderModel({
-    el: ".outMd",
-    data: {
-      content: ""
-    },
-    events: function(){
-      var textarea = document.querySelector("#mdInput");
-      var _this = this;
-      textarea.addEventListener("keyup", function(e){
-          _this.data.content = marked(this.value);
-          _this.refresh();
-      });
-    },
+  el: ".outMd",
+  data: {
+  content: ""
+},
+events: function(){
+  var textarea = document.querySelector("#mdInput");
+  var _this = this;
+  textarea.addEventListener("input", function(e){
+    _this.data.content = marked(this.value, {sanitize: true});
+    _this.refresh();
+  });
+},
 tmpl: "&lt;span soda-bind-html='content'>&lt;/span>"
 });
 
 markdown.rock();
+
           </pre>
         </div>
         <div id="markdownEditor" class="codePlay">
@@ -632,8 +718,8 @@ content: ""
 events: function(){
 var textarea = document.querySelector("#mdInput");
 var _this = this;
-textarea.addEventListener("keyup", function(e){
-  _this.data.content = marked(this.value);
+textarea.addEventListener("input", function(e){
+  _this.data.content = marked(this.value, {sanitize: true});
   _this.refresh();
   });
 },
@@ -738,6 +824,62 @@ pageWrapper.add(pageList);
 pageWrapper.add(pagation);
 
 pageWrapper.rock();
+
+
+// dialog
+var dialogRender = new RenderModel({
+  data: {
+    title: "Dialog",
+    content: "Abstact publishes Version 2.0"
+  },
+  fuse: Model.createFuse("click", "#showDialog"),
+
+  el: ".dialogWrapper",
+  tmpl: "<h2>{{title}}<span class='close'>close</span></h2><div class='dialogContent'>{{content}}</div>"
+});
+
+dialogRender.addEventListener("beforeactived", function(){
+    document.querySelector(".dialogWrapper").innerHTML = "";
+    this.show();
+});
+
+dialogRender.addEventListener("unactived", function(){
+    this.hide();
+});
+
+
+var closeModel = new BaseModel({
+    fuse: Model.createFuse("click", ".close")
+});
+
+var controller = new MutexModel();
+controller.add(closeModel);
+controller.add(dialogRender);
+
+controller.rock();
+
+
+// dialog
+var dialogRender2 = new RenderModel({
+  data: {
+    title: "Dialog",
+    content: "Abstact publishes Version 2.0"
+  },
+
+  el: ".dialogWrapper2",
+  tmpl: "<h2>{{title}}<span class='close2'>close</span></h2><div class='dialogContent'>{{content}}</div>"
+});
+
+
+var closeModel2 = new BaseModel({
+});
+
+var controller2 = new MultitabModel();
+controller2.add(".close2", closeModel2);
+controller2.add("#showDialog2", dialogRender2);
+
+controller2.rock();
+
 </script>
 </body>
 </html>

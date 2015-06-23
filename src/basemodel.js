@@ -8,7 +8,7 @@
 
     var _containerCountInfo = Model.containerCountInfo;
 
-    var acceptOpt = ['tmpl', 'el', 'data', 'fuse', 'myData', 'onreset', 'comment', 'helper', 'name'];
+    var acceptOpt = ['tmpl', 'el', 'data', 'fuse', 'myData', 'onreset', 'comment', 'helper', 'name', 'active', 'unactive'];
     var BaseModel = Model.Class({
         type: "BaseModel",
 
@@ -203,6 +203,10 @@
 
         stop: function(eventName){
             this.status = "unactive";
+
+            // active时的动作
+            this.unactive && this.unactive(event);
+
 
             var event = Model.createEvent({
                 type: "unactived",

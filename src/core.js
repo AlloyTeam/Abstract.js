@@ -292,6 +292,15 @@
             return new Event(opt);
         },
 
+        createFuse: function(event, selector){
+            var fuseName = "fuse" +  ~~ (Math.random() * 1E6);
+            Model.$("body").on(event, selector, function(){
+                Model.trigger(fuseName);
+            });
+
+            return fuseName;
+        },
+
         addFuse: function(fuse, model){
             this.fuseMap[fuse] = model;
         },

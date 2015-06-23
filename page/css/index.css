@@ -372,6 +372,7 @@ span.right {
     border-radius: 2px;
     padding: 6px 11px;
     cursor: pointer;
+    color: #fff;
 }
 
 .download {
@@ -402,4 +403,61 @@ li.pageItem {
 .contentList {
     height: 130px;
     overflow: auto;
+}
+
+.subtitle {
+    text-align: center;
+    margin-top: -50px;
+    margin-bottom: 70px;
+    font-size: 19px;
+    color: #FCFCFC;
+}
+
+.btn-red {
+    margin-left: 22px;
+    background-color: rgb(37, 136, 197);
+}
+
+.btn-red:hover {
+    background-color: rgb(73, 152, 200);
+}
+
+.btn-red:active {
+    background-color: rgb(33, 113, 163);
+}
+
+div.dialogWrapper,.dialogWrapper2 {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    background-color: #FFF;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 0 2px 2px rgba(113, 113, 113, 0.33);
+    padding: 0;
+    border: 1px solid #B3B3B3;
+}
+
+.dialogWrapper h2,.dialogWrapper2 h2 {
+    font-size: 16px;
+    padding: 0px 11px;
+    border-bottom: 1px solid #B3B3B3;
+    margin-top: 2px;
+    line-height: 31px;
+    height: 34px;
+}
+
+.dialogWrapper .close,.dialogWrapper2 .close2 {
+    float: right;
+    color: rgb(161, 49, 83);
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.dialogContent {
+    padding: 53px 53px;
+}
+
+.dialogWrapper .close:hover {
+    color: red;
 }
