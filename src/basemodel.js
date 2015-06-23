@@ -183,7 +183,6 @@
 
             var defer = Model.defer();
 
-            console.log(this.el, "rocked");
             this.status = "active";
 
  
@@ -203,7 +202,6 @@
         },
 
         stop: function(eventName){
-            console.log(this.el, "unrocked");
             this.status = "unactive";
 
             var event = Model.createEvent({
@@ -244,14 +242,16 @@
         },
 
         info: function(msg){
-            var args = [];
-            var args = ["Model:", (this.comment || (typeof this.el === "string" ? this.el : this.el && this.el.selector)) + ":"];
+            if(Model.debug){
+                var args = [];
+                var args = ["Model:", (this.comment || (typeof this.el === "string" ? this.el : this.el && this.el.selector)) + ":"];
 
-            for(var i = 0; i < arguments.length; i ++){
-                args.push(arguments[i]);
+                for(var i = 0; i < arguments.length; i ++){
+                    args.push(arguments[i]);
+                }
+
+                console.info.apply(console, args);
             }
-
-            console.info.apply(console, args);
         },
 
         reset: function(){

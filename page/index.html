@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Abstract.js</title>
-  <link media="all" rel="stylesheet" href="css/index.css" type="text/css" />
+<meta charset="UTF-8">
+<title>Abstract.js</title>
+<link media="all" rel="stylesheet" href="css/index.css" type="text/css" />
 </head>
 <body>
 
@@ -13,24 +13,35 @@
 </div>
 
 <div class="page page2">
-  <div class="header">Abstract.js</div>
-  <div class="intro">Abstract.js is a framework; Abstract.js concerns about the logic rather than view changing</div>
-  <div class="using">
-    <h2>Who Are Using Abstract?</h2>
-    <div>
-      <span>QQ Tribes</span>
-      <span>QQ Group Activities For PC/Mobile</span>
-      <span>More of You...</span>
+  <div class="header"><span class="logo"></span>Abstract.js
+      <span class="right">Document &nbsp;GitHub &nbsp;Team Blog</span>
+  </div>
+  <div class="intro">
+    <div class="wrapper">
+      <h1><span class="logo"></span>Abstract 2.0</h1>
+      <div class="download">
+        <div class="btn">download 2.0 Now</div>
+      </div>
+
     </div>
   </div>
-  <div class="exam">
-    <h2>Simple RenderModel</h2>
-    <div class="des">
-      RenderModel is Using for Rendering Page Blocking;Here is a sample for RenderModel;
+  <div class="using wrapper">
+    <h2>Who Are Using Abstract?</h2>
+    <div class="usingIntro">
+      <span class="tribes"><div class="icon"></div>QQ Tribes</span>
+      <span class="activity"><div class="icon"></div>QQ Group Activities<br /></span>
+      <span class="moreOfYou"><div class="icon"></div>More of You<br /></span>
     </div>
+  </div>
+  <div class="main wrapper">
+    <div class="exam">
+      <h2>Simple RenderModel</h2>
+      <div class="des">
+        RenderModel is Using for Rendering Page Blocking;Here is a sample for RenderModel;
+      </div>
 
 
-    <pre>
+      <pre>
     var header = new RenderModel({
       el: ".header",
       url: "/cgi/headerData",
@@ -41,13 +52,13 @@
     });
 
     header.rock();
-    </pre>
+      </pre>
 
-    <h2>Simple ScrollModel</h2>
-    <div class="des">
-      ScrollModel is Using for Rendering Blockings which loads more content when users pull down list to the bottom.
-    </div>
-    <pre>
+      <h2>Simple ScrollModel</h2>
+      <div class="des">
+        ScrollModel is Using for Rendering Blockings which loads more content when users pull down list to the bottom.
+      </div>
+      <pre>
     var header = new ScrollModel({
       el: ".list",
       scrollEl: ".list",
@@ -59,19 +70,19 @@
     });
 
     header.rock();
-    </pre>
+      </pre>
 
-    <h2>PageModel</h2>
-    <div class="des">
-      PageModel is one of Relationship Model, which tells the relationship between models; 
-    </div>
+      <h2>PageModel</h2>
+      <div class="des">
+        PageModel is one of Relationship Model, which tells the relationship between models; 
+      </div>
 
-    <h2>MultitabModel</h2>
-    <div class="des">
-      MultitabModel is one of Relationship Model, which tells the relationship between models;
-    </div>
+      <h2>MultitabModel</h2>
+      <div class="des">
+        MultitabModel is one of Relationship Model, which tells the relationship between models;
+      </div>
 
-    <pre>
+      <pre>
       var tab1 = new RenderModel();
       var tab2 = new RenderModel();
 
@@ -81,18 +92,401 @@
       tab.add(".tab2", tab2);
 
       tab.rock();
-    </pre>
+      </pre>
+
+      <h2>Let's see what Abstract can do.</h2>
+      <h2>Rendering</h2>
+
+      <div class="des">
+        <div class="examintro">
+          <pre>
+        var header = new RenderModel({
+          el: "#render",
+          data: {
+            title: "Abstract.js",
+            desc: "Abstract.js is next framework for the web"
+          },
+
+          tmpl: "{{title}}&lt;br />{{desc}}"
+        });
+
+        header.rock();
+          </pre>
+        </div>
+
+        <div class="codePlay" id="render">
+        </div>
+      </div>
+      
+      <h2>Listing</h2>
+      <div class="des">
+      	<div class="examintro">
+      		<pre>
+      var listing = new ScrollModel({
+      data: {
+      list: [
+      'Abstact.js publishes version 2.0',
+      'Abstact.js publishes version 2.0',
+      'Abstact.js publishes version 2.0',
+      'Abstact.js publishes version 2.0',
+      'Abstact.js publishes version 2.0'
+      ]
+      },
+
+      scrollEl: '#listing',
+      tmpl: "&lt;li soda-repeat='item in list'>{{item}}&lt;/li>",
+      el: "#listing"
+      });
+
+      listing.rock();
+          </pre>
+      	</div>
+      		<div id="listing" class="codePlay">
+            <ol></ol>
+            <div class="loading">载入中</div>
+            
+          </div >
+      </div>
+
+      <h2>Tabs</h2>
+      <div class="des">
+        <div class="examintro">
+          <pre>
+          var tab1 = new RenderModel({
+            el: ".tabpage",
+            data: {
+              name: "tab1"
+            },
+            tmpl: "{{name}}"
+          });
+
+          var tab2 = tab1.extend({
+            el: "#tab
+            data: {
+              name: "tab2"
+            }
+          });
+
+          var tab3 = tab1.extend({
+            data: {
+              name: "tab3"
+            }
+          });
+
+          var tab = new MultitabModel();
+          tab.add(".tab1");
+          tab.add(".tab2");
+          tab.add(".tab3");
+
+          tab.rock();
+
+          </pre>
+        </div>
+
+        <div class="codePlay" id="tabs">
+          <ul>
+            <li class="tab1">tab1</li>
+            <li class="tab2">tab2</li>
+            <li class="tab3">tab3</li>
+          </ul>
+          <div class="tabpage"></div>
+        </div>
+
+      </div>
+
+      <h2>Paging</h2>
+      <div class="des">
+      	<div class="examintro">
+      		<pre>
+var pageList = new RenderModel({
+    el: ".contentList",
+    tmpl: "&lt;li soda-repeat='item in list'>{{item}}&lt;/li>",
+    data: {
+      list: [
+        "第1页数据"
+      ]
+    },
+
+    processData: function(){
+    }
+});
+
+var pagation = new RenderModel({
+    el: ".pagation",
+    tmpl: "&lt;li data-index='{{$index + 1}}' class='pageItem' soda-repeat='item in list'>{{$index + 1}}&lt;/li>",
+    data: {
+      list: new Array(10)
+    },
+
+processData: function(){
+},
+
+    events: function(){
+      var els = document.querySelectorAll(".pageItem");
+
+      for(var i = 0; i < els.length; i ++){
+        var el = els[i];
+
+        el.onclick = function(){
+          var index = this.getAttribute("data-index");
+
+          pageList.data = {
+            list: [
+            ]
+          };
+
+          for(var j = 0; j < index; j ++){
+            pageList.data.list.push("第" + (index) + "页数据");
+          }
+
+          pageList.refresh();
+        };
+      }
+    }
+});
+
+var pageWrapper = new PageModel();
+pageWrapper.add(pageList);
+pageWrapper.add(pagation);
+
+pageWrapper.rock(); 
+          </pre>
+      	</div>
+
+        <div id="paging" class="codePlay">
+           <ul class="pagation"></ul>
+           <ul class="contentList"></ul>
+        </div>
+      </div>
+
+
+
+
+      <h2>Quick Mobile Page</h2>
+      <div class="des">
+        <div class="examintro">
+          <pre>
+        var header = new RenderModel({
+    el: "#header",
+    data: {
+      name: "Header"
+    },
+    tmpl: "{{name}}"
+});
+
+var newsList = new ScrollModel({
+  data: {
+    list: [
+      'Abstact.js publishes version 2.0',
+      'Abstact.js publishes version 2.0',
+      'Abstact.js publishes version 2.0',
+      'Abstact.js publishes version 2.0',
+      'Abstact.js publishes version 2.0'
+    ]
+  },
+
+  scrollEl: '.subpage1',
+  tmpl: "&lt;li soda-repeat='item in list'>{{item}}&lt;/li>",
+  el: ".subpage1 ol"
+});
+
+var newsTab = new PageModel();
+var newsFrame = new RenderModel({
+    tmpl: "&lt;ol>&lt;/ol>&lt;div>加载中&lt;/div>",
+    el: ".subpage1",
+    onreset: function(){
+      document.querySelector(".subpage1").innerHTML = "";
+    }
+});
+
+newsTab.add(newsFrame);
+newsTab.add(newsList);
+
+var me = new RenderModel({
+      tmpl: "Me Tab",
+      el: ".subpage2"
+});
+var setting = me.extend({
+    tmpl: "Setting Tab",
+    el: ".subpage3"
+});
+
+
+var tabs = new MultitabModel();
+tabs.add(".news", newsTab);
+tabs.add(".me", me);
+tabs.add(".setting", setting);
+
+var page = new PageModel();
+page.add(header);
+page.add(tabs);
+
+page.rock();
+          </pre>
+        </div>
+        <div class="codePlay" id="mobilePage">
+          <div id="header"></div>
+          <div class="submain">
+            <div class="subpage subpage1">
+
+
+            </div>
+            <div class="subpage subpage2"></div>
+            <div class="subpage subpage3"></div>
+          </div>
+          <ul class="bottomNav">
+            <li class="news">news</li>
+            <li class="me">me</li>
+            <li class="setting">settings</li>
+          </ul>
+        </div>
+      </div>
+      <h2>Abstract is not MVVM Framework, but also Abstract can construct MVVM logics as well. <br />
+        But Abstract concerns about the logic about Datas, not the views.
+      </h2>
+      <h2>To Do</h2>
+      <div class="des">
+        <div class="examintro">
+          <pre>
+var todoList = new RenderModel({
+  data: {
+    list: []
+  },
+  el: ".toList",
+
+  tmpl: "&lt;ul>&lt;li soda-repeat='item in list'>{{item}}&lt;/li>&lt;/ul>",
+  events: function(){
+    var input = document.getElementById("toDoInput");
+    var button = document.getElementById("add");
+
+    var _this = this;
+    add.onclick = function(){
+      var text = input.value;
+
+      _this.data.list = _this.data.list.concat(text);
+
+      input.value = "";
+
+      _this.refresh();
+    };
+  }
+});
+
+todoList.rock();
+          </pre>
+        </div>
+
+        <div class="codePlay" id="todoApp">
+          <h3>To Do</h3>
+          <div class="toList"></div>
+          <input type="" id="toDoInput" />
+          <button id="add">Add Item</button>
+        </div>
+      </div>
+      <h2>Markdown Editor</h2>
+      <div class="des">
+        <div class="examintro">
+          <pre>
+var markdown = new RenderModel({
+    el: ".outMd",
+    data: {
+      content: ""
+    },
+    events: function(){
+      var textarea = document.querySelector("#mdInput");
+      var _this = this;
+      textarea.addEventListener("keyup", function(e){
+          _this.data.content = marked(this.value);
+          _this.refresh();
+      });
+    },
+tmpl: "&lt;span soda-bind-html='content'>&lt;/span>"
+});
+
+markdown.rock();
+          </pre>
+        </div>
+        <div id="markdownEditor" class="codePlay">
+          <h3>Input</h3>
+          <textarea rows="15" cols="35" id="mdInput" placeholder="input markdown here"></textarea>
+          <h3>Output</h3>
+          <div class="outMd"></div>
+        </div>
+      </div>
+
+      <h2>Progress Bar</h2>
+      <div class="des">
+        <div class="examintro">
+          <pre>
+
+var bar = new RenderModel({
+    el: "#bar",
+    data: {
+      width: 0
+    },
+
+    tmpl: "&lt;div style='width: {{width}}%'>&lt;/div>",
+    events: function(){
+      var _this = this;
+      setInterval(function(){
+          _this.data.width += 0.3;
+
+          if(_this.data.width > 100){
+            _this.data.width = 0;
+          }
+
+          _this.refresh();
+      }, 1000 / 60);
+    }
+});
+
+bar.rock(); 
+          </pre>
+        </div>
+
+        <div class="codePlay" id="bar">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="wrapper">
+    © AlloyTeam
   </div>
 </div>
 
 <script type="text/javascript" src="js/abstract-2.0.js"></script>
 <script type="text/javascript" src="js/bo.js"></script>
+<script type="text/javascript" src="js/marked.min.js"></script>
 
 <script type="text/javascript">
 var handler = function(){
   var hash = window.location.hash;
   if(hash === "#doc"){
-      document.body.className += "doc";
+    document.body.className += "doc";
+  }else{
+
+  bo.init("Abstract.js 2.0", "The Next Framework For Web", function(){
+      window.location.hash ="doc";
+      //document.body.className += "doc";
+      });
+
+  document.getElementById("go").onclick = function(){
+    var runed = 0;
+    this.addEventListener("transitionend", function(){
+        if(! runed){
+        bo.bang();
+
+        runed = 1;
+        }
+        });
+
+    this.className += " fade";
+
+    //bo.bang();
+  };
+
   }
 };
 
@@ -100,25 +494,250 @@ window.onhashchange = handler;
 
 handler();
 
-bo.init("Abstract.js", "The Next Framework For Web", function(){
-    window.location.hash ="doc";
-    //document.body.className += "doc";
+
+var header = new RenderModel({
+el: "#render",
+data: {
+title: "Abstract.js",
+desc: "Abstract.js is next framework for the web"
+},
+
+tmpl: "{{title}}<br />{{desc}}"
 });
 
-document.getElementById("go").onclick = function(){
-    var runed = 0;
-    this.addEventListener("transitionend", function(){
-      if(! runed){
-        bo.bang();
+header.rock();
 
-        runed = 1;
-      }
-    });
 
-    this.className += " fade";
+var tab1 = new RenderModel({
+el: ".tabpage",
+data: {
+name: "tab1"
+},
+tmpl: "{{name}}"
+});
 
-    //bo.bang();
+var tab2 = tab1.extend({
+data: {
+name: "tab2"
+}
+});
+
+var tab3 = tab1.extend({
+data: {
+name: "tab3"
+}
+});
+
+var tab = new MultitabModel();
+tab.add(".tab1", tab1);
+tab.add(".tab2", tab2);
+tab.add(".tab3", tab3);
+
+tab.rock();
+
+
+
+var todoList = new RenderModel({
+data: {
+list: []
+},
+el: ".toList",
+
+tmpl: "<ul><li soda-repeat='item in list'>{{item}}</li></ul>",
+events: function(){
+var input = document.getElementById("toDoInput");
+var button = document.getElementById("add");
+
+var _this = this;
+add.onclick = function(){
+var text = input.value;
+
+_this.data.list = _this.data.list.concat(text);
+
+input.value = "";
+
+_this.refresh();
 };
+}
+});
+
+todoList.rock();
+
+
+
+var header = new RenderModel({
+el: "#header",
+data: {
+name: "Header"
+},
+tmpl: "{{name}}"
+});
+
+var newsList = new ScrollModel({
+data: {
+list: [
+'Abstact.js publishes version 2.0',
+'Abstact.js publishes version 2.0',
+'Abstact.js publishes version 2.0',
+'Abstact.js publishes version 2.0',
+'Abstact.js publishes version 2.0'
+]
+},
+
+scrollEl: '.subpage1',
+tmpl: "<li soda-repeat='item in list'>{{item}}</li>",
+el: ".subpage1 ol"
+});
+
+var newsTab = new PageModel();
+var newsFrame = new RenderModel({
+tmpl: "<ol></ol><div>加载中</div>",
+el: ".subpage1",
+onreset: function(){
+document.querySelector(".subpage1").innerHTML = "";
+}
+});
+
+newsTab.add(newsFrame);
+newsTab.add(newsList);
+
+var me = new RenderModel({
+tmpl: "Me Tab",
+el: ".subpage2"
+});
+var setting = me.extend({
+tmpl: "Setting Tab",
+el: ".subpage3"
+});
+
+
+var tabs = new MultitabModel();
+tabs.add(".news", newsTab);
+tabs.add(".me", me);
+tabs.add(".setting", setting);
+
+var page = new PageModel();
+page.add(header);
+page.add(tabs);
+
+page.rock();
+
+
+
+var markdown = new RenderModel({
+el: ".outMd",
+data: {
+content: ""
+},
+events: function(){
+var textarea = document.querySelector("#mdInput");
+var _this = this;
+textarea.addEventListener("keyup", function(e){
+  _this.data.content = marked(this.value);
+  _this.refresh();
+  });
+},
+tmpl: "<span soda-bind-html='content'></span>"
+});
+
+markdown.rock();
+
+
+var bar = new RenderModel({
+el: "#bar",
+data: {
+width: 0
+},
+
+tmpl: "<div style='width: {{width}}%'></div>",
+events: function(){
+var _this = this;
+setInterval(function(){
+  _this.data.width += 0.3;
+
+  if(_this.data.width > 100){
+  _this.data.width = 0;
+  }
+
+  _this.refresh();
+  }, 1000 / 60);
+}
+});
+
+bar.rock();
+
+
+var listing = new ScrollModel({
+data: {
+list: [
+'Abstact.js publishes version 2.0',
+'Abstact.js publishes version 2.0',
+'Abstact.js publishes version 2.0',
+'Abstact.js publishes version 2.0',
+'Abstact.js publishes version 2.0'
+]
+},
+
+scrollEl: '#listing',
+tmpl: "<li soda-repeat='item in list'>{{item}}</li>",
+el: "#listing ol"
+});
+
+listing.rock();
+
+
+var pageList = new RenderModel({
+    el: ".contentList",
+    tmpl: "<li soda-repeat='item in list'>{{item}}</li>",
+    data: {
+      list: [
+        "第1页数据"
+      ]
+    },
+
+    processData: function(){
+    }
+});
+
+var pagation = new RenderModel({
+    el: ".pagation",
+    tmpl: "<li data-index='{{$index + 1}}' class='pageItem' soda-repeat='item in list'>{{$index + 1}}</li>",
+    data: {
+      list: new Array(10)
+    },
+
+processData: function(){
+},
+
+    events: function(){
+      var els = document.querySelectorAll(".pageItem");
+
+      for(var i = 0; i < els.length; i ++){
+        var el = els[i];
+
+        el.onclick = function(){
+          var index = this.getAttribute("data-index");
+
+          pageList.data = {
+            list: [
+            ]
+          };
+
+          for(var j = 0; j < index; j ++){
+            pageList.data.list.push("第" + (index) + "页数据");
+          }
+
+          pageList.refresh();
+        };
+      }
+    }
+});
+
+var pageWrapper = new PageModel();
+pageWrapper.add(pageList);
+pageWrapper.add(pagation);
+
+pageWrapper.rock();
 </script>
 </body>
 </html>

@@ -16,10 +16,16 @@ html,body{
     padding-top: 360px;
     text-shadow: 0 0 11px rgba(86, 86, 86, 0.99);
 }
-
+.wrapper {
+    width: 1003px;
+    margin: 0 auto;
+}
 .intro {
     font-size: 16px;
-    margin-top: 77px;
+    margin-top: 58px;
+    height: 270px;
+    background-color: rgb(73, 73, 73);
+    color: #fff;
 }
 
 .learnMore {
@@ -111,6 +117,7 @@ canvas#canvas {
 body.doc {
     background: rgb(210, 210, 210);
     -webkit-transition: background ease-in 0.3s;
+    height: auto;
 }
 
 .doc .page1 {
@@ -119,7 +126,7 @@ body.doc {
 
 .header {
     height: 50px;
-    background: rgb(110, 110, 110);
+    background: rgba(0, 0, 0, 0.72);
     color: #9FF3FD;
     font-size: 22px;
     font-weight: 100;
@@ -130,5 +137,269 @@ body.doc {
 }
 
 .page.page2 {
+    overflow: auto;
+}
+
+.tab1.active, .tab2.active, .tab3.active {
+    color: red !important;
+    background-color: #FFFCE5 !important;
+    border-bottom: none !important;
+    margin-top: 0px;
+}
+
+.tab1, .tab2,.tab3 {
+    cursor: pointer;
+}
+
+.subpage1 {
+    height: 100%;
+    overflow: auto;
+}
+
+#bar div {
+    height: 10px;
+    background-color: red;
+}
+
+div#bar {
+    width: 262px;
+}
+
+.header {}
+
+
+
+.usingIntro > span {
+    display: inline-block;
+    width: 149px;
+}
+
+.usingIntro {
+    text-align: center;
+}
+
+.usingIntro .icon {
+    background: url(image/tribe.png) no-repeat;
+    height: 106px;
+    background-position: 53px 50px;
+    background-size: 47px 41px;
+}
+
+.activity .icon {
+    background-image: url(image/activity.png);
+    background-size: 47px 41px;
+}
+
+.moreOfYou .icon {
+    background-image: url(image/more.png);
+    background-size: 44px;
+}
+
+.intro h1 {
+    text-align: center;
+    font-size: 48px;
+    line-height: 112px;
+    color: #24CAC8;
+}
+
+.codePlay {
+    float: right;
+    width: 270px;
+    overflow: hidden;
+}
+
+.examintro {
+    float: left;
+    border: 1px solid silver;
+    width: 661px;
+    padding: 2px 17px;
+    background-color: white;
+}
+
+.des {
+    overflow: auto;
+}
+
+div#tabs ul {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid rgb(163, 163, 163);
+    overflow: auto;
+}
+
+#tabs li {
+    border: 1px solid rgb(163, 163, 163);
+    border-left: none;
+    float: left;
+    border-top: none;
+    list-style: none;
+    padding: 12px;
+    /* border-top-left-radius: 15px; */
+    /* border-top-right-radius: 9px; */
+    background-color: #C7C7C7;
+    color: #fff;
+    width: 50px;
+    text-align: center;
+}
+div#tabs  li:first-child{
+    border-left: 1px solid rgb(163, 163, 163);
+    /* border-top-left-radius: 10px; */
+}
+div#tabs {
+    background-color: #fff;
+    overflow: hidden;
+    width: 226px;
+}
+
+div.tabpage {
+    border: 1px solid rgb(163, 163, 163);
+    background-color: #FFFCE5;
+    border-top: none;
+    padding: 32px;
+    margin-top: -1px;
+    text-align: center;
+}
+
+div#render {
+    background-color: #FFFCE5;
+    font-size: 14px;
+    padding: 7px;
+    border-radius: 5px;
+}
+
+div#mobilePage {
+    background-color: #FFFCE5;
+    width: 230px;
+}
+
+div#header {
+    text-align: center;
+    line-height: 36px;
+    border-bottom: 1px solid #ccc;
+    overflow: hidden;
+    height: 36px;
+}
+
+.submain {
+    height: 99px;
+    background-color: #fff;
+}
+
+ul.bottomNav {
+    margin: 0;
+    padding: 0;
+    font-size: 0;
+    display: flex;
+}
+
+.bottomNav li {
+    list-style: none;
+    display: inline-block;
+    text-align: center;
+    width: 76px;
+    height: 52px;
+    line-height: 52px;
+    background-color: #ccc;
+    font-size: 16px;
+    flex: 1;
+    cursor: pointer;
+}
+
+.submain ol {
+    list-style-position: outside;
+    margin-left: -9px;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+.subpage1 div {
+    text-align: center;
+    font-size: 12px;
+}
+
+.bottomNav li.active.selected {
+    background-color: #ECECEC;
+}
+
+#listing {
+    background-color: rgb(255, 252, 229);
+    height: 100px;
+    overflow: auto;
+}
+
+#listing li {
+    padding: 4px;
+    margin-left: -5px;
+}
+
+.loading {
+    text-align: center;
+    font-size: 12px;
+    margin-bottom: 10px;
+    color: #000;
+}
+
+.outMd {
+    min-height: 99px;
+    word-break: break-all;
+    line-height: 20px;
+}
+
+span.logo {
+    display: inline-block;
+    background: url(image/more.png) no-repeat;
+    height: 61px;
+    width: 45px;
+    background-size: 100%;
+    vertical-align: middle;
+}
+
+.header span.logo {
+    width: 28px;
+    height: 34px;
+}
+
+span.right {
+    float: right;
+    padding-right: 39px;
+    font-size: 16px;
+    margin-top: 8px;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #C97523;
+    border-radius: 2px;
+    padding: 6px 11px;
+    cursor: pointer;
+}
+
+.download {
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: #EA9747;
+}
+
+.btn:active {
+    background-color: rgb(174, 102, 32);
+}
+
+.pagation {
+    list-style: none;
+}
+
+li.pageItem {
+    display: inline-block;
+    padding: 3px;
+    background-color: #BABABA;
+    border-radius: 3px;
+    margin: 2px;
+    cursor: pointer;
+}
+
+.contentList {
+    height: 130px;
     overflow: auto;
 }

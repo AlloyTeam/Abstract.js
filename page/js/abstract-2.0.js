@@ -34,26 +34,30 @@
     };
 
     console.info = function(){
-        var container = arguments[1];
+        if(Model.debug){
+            var container = arguments[1];
 
-        var currMsg;
-        var args = Array.prototype.slice.call(arguments, 0);
-        var currArgs = arguments;
+            var currMsg;
+            var args = Array.prototype.slice.call(arguments, 0);
+            var currArgs = arguments;
 
-        if(_lastMsg[0] && _lastMsg[0] === "Model:"){
-            //currArgs[0] = currArgs[0].replace(/./g, " ");
-            currArgs[0] = "♫";
+            if(_lastMsg[0] && _lastMsg[0] === "Model:"){
+                //currArgs[0] = currArgs[0].replace(/./g, " ");
+                currArgs[0] = "♫";
 
-            if(_lastMsg[1] && _lastMsg[1] === container){
-                //currArgs[1] =  currArgs[1].replace(/./g, " ");
-                currArgs[1] = " ↗";
-            }else{
-                //currArgs = Array.prototype.slice.call(arguments, 1);
+                if(_lastMsg[1] && _lastMsg[1] === container){
+                    //currArgs[1] =  currArgs[1].replace(/./g, " ");
+                    currArgs[1] = " ↗";
+                }else{
+                    //currArgs = Array.prototype.slice.call(arguments, 1);
+                }
             }
-        }
 
-        originInfo.apply(console, currArgs);
-        _lastMsg = args;
+            originInfo.apply(console, currArgs);
+            _lastMsg = args;
+        }else{
+            originInfo.apply(console, arguments);
+        }
     };
 
     var PrivateVar = function(value){
@@ -706,7 +710,6 @@
 
             var defer = Model.defer();
 
-            console.log(this.el, "rocked");
             this.status = "active";
 
  
@@ -726,7 +729,6 @@
         },
 
         stop: function(eventName){
-            console.log(this.el, "unrocked");
             this.status = "unactive";
 
             var event = Model.createEvent({
@@ -767,14 +769,16 @@
         },
 
         info: function(msg){
-            var args = [];
-            var args = ["Model:", (this.comment || (typeof this.el === "string" ? this.el : this.el && this.el.selector)) + ":"];
+            if(Model.debug){
+                var args = [];
+                var args = ["Model:", (this.comment || (typeof this.el === "string" ? this.el : this.el && this.el.selector)) + ":"];
 
-            for(var i = 0; i < arguments.length; i ++){
-                args.push(arguments[i]);
+                for(var i = 0; i < arguments.length; i ++){
+                    args.push(arguments[i]);
+                }
+
+                console.info.apply(console, args);
             }
-
-            console.info.apply(console, args);
         },
 
         reset: function(){
@@ -1221,7 +1225,9 @@
         get currModel(){
             return this.mutexModel.currChild;
         },
-        constructor: function(){
+        constructor: function(opt){
+             this.callSuper(opt);
+
             this.mutexModel = new MutexModel();
 
             this.selectorMap = {};
@@ -1232,7 +1238,7 @@
             this.mutexModel.addEventListener('beforeactived', function(e){
                 var smodel = e.target;
 
-                //if(smodel.parent == this){
+                if(/RenderModel|ScrollModel/.test(smodel.type)){
 
                     var id = $(smodel.el).attr("id");
 
@@ -1252,13 +1258,12 @@
 
                     // 干涉渲染模型的激活态行为
                     var target = e.target;
-                //}
+                }
             });
 
             var _this = this;
             this.addEventListener("beforeswitched", function(e, data){
 
-            console.log(data);
                 var model = _this.mutexModel.currChild;
 
                 var switchType = e.name;
@@ -1376,7 +1381,6 @@
                     });
 
                     realizeModel.addEventListener('unactived', function(e){
-                        console.log("unactived");
                         this.hide();
                     });
 
@@ -1393,7 +1397,6 @@
                 });
 
                 model.addEventListener('unactived', function(e){
-                    console.log("unactived");
                     this.hide();
                 });
 
@@ -1825,9 +1828,9 @@
             if(this.url){
                 this.getData(callback);
             }else{
-                if(this.cgiCount === 0){
+                //if(this.cgiCount === 0){
                     this.cgiCount ++;
-                }
+                //}
 
                 if(this.data){
                 }else{

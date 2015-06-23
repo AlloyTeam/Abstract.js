@@ -7,7 +7,9 @@
         get currModel(){
             return this.mutexModel.currChild;
         },
-        constructor: function(){
+        constructor: function(opt){
+             this.callSuper(opt);
+
             this.mutexModel = new MutexModel();
 
             this.selectorMap = {};
@@ -18,7 +20,7 @@
             this.mutexModel.addEventListener('beforeactived', function(e){
                 var smodel = e.target;
 
-                //if(smodel.parent == this){
+                if(/RenderModel|ScrollModel/.test(smodel.type)){
 
                     var id = $(smodel.el).attr("id");
 
@@ -38,13 +40,12 @@
 
                     // 干涉渲染模型的激活态行为
                     var target = e.target;
-                //}
+                }
             });
 
             var _this = this;
             this.addEventListener("beforeswitched", function(e, data){
 
-            console.log(data);
                 var model = _this.mutexModel.currChild;
 
                 var switchType = e.name;
@@ -162,7 +163,6 @@
                     });
 
                     realizeModel.addEventListener('unactived', function(e){
-                        console.log("unactived");
                         this.hide();
                     });
 
@@ -179,7 +179,6 @@
                 });
 
                 model.addEventListener('unactived', function(e){
-                    console.log("unactived");
                     this.hide();
                 });
 

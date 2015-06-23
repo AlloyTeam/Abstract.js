@@ -358,9 +358,9 @@
             if(this.url){
                 this.getData(callback);
             }else{
-                if(this.cgiCount === 0){
+                //if(this.cgiCount === 0){
                     this.cgiCount ++;
-                }
+                //}
 
                 if(this.data){
                 }else{

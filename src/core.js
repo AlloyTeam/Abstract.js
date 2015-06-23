@@ -23,26 +23,30 @@
     };
 
     console.info = function(){
-        var container = arguments[1];
+        if(Model.debug){
+            var container = arguments[1];
 
-        var currMsg;
-        var args = Array.prototype.slice.call(arguments, 0);
-        var currArgs = arguments;
+            var currMsg;
+            var args = Array.prototype.slice.call(arguments, 0);
+            var currArgs = arguments;
 
-        if(_lastMsg[0] && _lastMsg[0] === "Model:"){
-            //currArgs[0] = currArgs[0].replace(/./g, " ");
-            currArgs[0] = "♫";
+            if(_lastMsg[0] && _lastMsg[0] === "Model:"){
+                //currArgs[0] = currArgs[0].replace(/./g, " ");
+                currArgs[0] = "♫";
 
-            if(_lastMsg[1] && _lastMsg[1] === container){
-                //currArgs[1] =  currArgs[1].replace(/./g, " ");
-                currArgs[1] = " ↗";
-            }else{
-                //currArgs = Array.prototype.slice.call(arguments, 1);
+                if(_lastMsg[1] && _lastMsg[1] === container){
+                    //currArgs[1] =  currArgs[1].replace(/./g, " ");
+                    currArgs[1] = " ↗";
+                }else{
+                    //currArgs = Array.prototype.slice.call(arguments, 1);
+                }
             }
-        }
 
-        originInfo.apply(console, currArgs);
-        _lastMsg = args;
+            originInfo.apply(console, currArgs);
+            _lastMsg = args;
+        }else{
+            originInfo.apply(console, arguments);
+        }
     };
 
     var PrivateVar = function(value){
