@@ -455,8 +455,76 @@ controllPage.rock();
             <div class="subpage_1"></div>
             <div class="subpage_2"></div>
         </div>
+
       </div>
 
+
+        <h2>Pic Slider</h2>
+        <div class="des">
+          <div class="examintro">
+            The pic comes in the same direction; Just less than 50 lines code to write an perfect pic slider and with clear logic and without event bindings;
+            <pre class="brush: js">
+var picsRender1 = new RenderModel({
+  data: {
+    src: "girl",
+  },
+
+  tmpl: "&lt;img soda-src='image/{{src}}.jpg' />",
+  
+  el: ".pics_1"
+});
+
+picsRender1.show = function(){
+  Model.$(this.el).addClass("waiting");
+  var _this = this;
+  setTimeout(function(){
+    Model.$(_this.el).removeClass("waiting");
+    Model.$(_this.el).addClass("showAni");
+  }, 0);
+};
+
+picsRender1.hide = function(){
+  Model.$(this.el).removeClass("showAni");
+};
+
+var picsRender2 = picsRender1.extend({
+  data: {
+    src: "car"
+  },
+
+  el: ".pics_2"
+});
+
+var picsRender3 = picsRender1.extend({
+  data: {
+    src: "dog"
+  },
+
+  el: ".pics_3"
+});
+
+var controllTab = new MultitabModel();
+controllTab.add(".controll1", picsRender1);
+controllTab.add(".controll2", picsRender2);
+controllTab.add(".controll3", picsRender3);
+
+controllTab.rock();
+
+            </pre>
+          </div>
+        <div class="codePlay picSlider">
+          <div class="pics">
+            <span class="pics_1"></span>
+            <span class="pics_2"></span>
+            <span class="pics_3"></span>
+          </div>
+          <div class="controller">
+            <span class="controll1"></span>
+            <span class="controll2"></span>
+            <span class="controll3"></span>
+          </div>
+        </div>
+        </div>
 <div class="spliter wrapper"></div>
       <h2>MVVM Using</h2>
       <div class='des'>Abstract is not MVVM Framework, but also Abstract can construct MVVM logics as well. <br />
@@ -1007,6 +1075,55 @@ window.addEventListener("scroll", function(){
 toTop.onclick = function(){
     window.scrollTo(0, 0)
 };
+
+
+var picsRender1 = new RenderModel({
+  data: {
+    src: "girl",
+  },
+
+tmpl: "<img soda-src='image/{{src}}.jpg' />",
+  
+  el: ".pics_1"
+});
+
+picsRender1.show = function(){
+  Model.$(this.el).addClass("waiting");
+  var _this = this;
+  setTimeout(function(){
+    Model.$(_this.el).removeClass("waiting");
+    Model.$(_this.el).addClass("showAni");
+  }, 0);
+};
+
+picsRender1.hide = function(){
+  Model.$(this.el).removeClass("showAni");
+};
+
+var picsRender2 = picsRender1.extend({
+  data: {
+    src: "car"
+  },
+
+  el: ".pics_2"
+});
+
+var picsRender3 = picsRender1.extend({
+  data: {
+    src: "dog"
+  },
+
+  el: ".pics_3"
+});
+
+var controllTab = new MultitabModel();
+controllTab.add(".controll1", picsRender1);
+controllTab.add(".controll2", picsRender2);
+controllTab.add(".controll3", picsRender3);
+
+controllTab.rock();
+
+
 </script>
 </body>
 </html>
