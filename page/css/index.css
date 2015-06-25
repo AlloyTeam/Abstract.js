@@ -7,6 +7,9 @@ html,body{
     font-family: microsoft yahei light,microsoft yahei;
     font-weight: 100;
 }
+.hide{
+    display: none;
+}
 
 .banner {
     color: #fff;
@@ -118,6 +121,7 @@ body.doc {
     background: rgb(210, 210, 210);
     -webkit-transition: background ease-in 0.3s;
     height: auto;
+    overflow: auto;
 }
 
 .doc .page1 {
@@ -127,13 +131,14 @@ body.doc {
 .header {
     height: 50px;
     background: rgba(0, 0, 0, 0.72);
-    color: #9FF3FD;
+    color: #25D7D5;
     font-size: 22px;
     font-weight: 100;
     padding-left: 21px;
     padding-top: 8px;
     position: fixed;
     width: 100%;
+    z-index: 111;
 }
 
 .page.page2 {
@@ -206,6 +211,7 @@ div#bar {
     float: right;
     width: 270px;
     overflow: hidden;
+    position: relative;
 }
 
 .examintro {
@@ -460,4 +466,83 @@ div.dialogWrapper,.dialogWrapper2 {
 
 .dialogWrapper .close:hover {
     color: red;
+}
+
+.subpage_1, .subpage_2 {
+    background-color: rgb(255, 252, 229);
+    text-align: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 100%;
+    transition: left cubic-bezier(0, 0.67, 0.44, 0.99) 0.3s;
+    padding: 34px 0;
+}
+
+div#pageAnimation {
+    width: 179px;
+    height: 171px;
+}
+
+.subpage_1, .subpage_2.current {
+    left: 0;
+}
+
+.subpage_2 {
+    background-color: rgb(178, 247, 244);
+}
+
+body {
+    overflow: hidden;
+}
+
+.feature > span {
+    display: inline-block;
+    width: 275px;
+    vertical-align: top;
+    margin: 2px 16px;
+}
+.feature.wrapper > span p {
+    text-align: left;
+}
+
+.feature {
+    text-align: center;
+}
+
+.spliter {
+    height: 1px;
+    background-color: rgb(189, 189, 189);
+    margin-top: 72px;
+}
+
+.toTop {
+    position: fixed;
+    bottom: 16px;
+    right: 56px;
+    background-color: rgb(194, 194, 194);
+    color: #fff;
+    padding: 13px;
+    cursor: pointer;
+}
+
+.toTop:hover {
+    background-color: rgb(190, 130, 130);
+}
+
+.copyright {
+    text-align: center;
+    height: 88px;
+    line-height: 31px;
+    color: #5E5E5E;
+    padding-top: 39px;
+}
+
+.btn a {
+    display: block;
+    height: 100%;
+    color: #fff;
+    text-decoration: none;
 }

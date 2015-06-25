@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Abstract.js</title>
 <link media="all" rel="stylesheet" href="css/index.css" type="text/css" />
+	<link type="text/css" rel="stylesheet" href="css/shCoreDefault.css"/>
 </head>
 <body>
 
@@ -21,12 +22,59 @@
       <h1><span class="logo"></span>Abstract 2.0</h1>
       <div class="subtitle">Rock Yourself In Mess Code</div>
       <div class="download">
-        <div class="btn">download 2.0 Now</div>
+        <div class="btn"><a href="js/abstract-2.0.js" download="abstract-2.0.js">download 2.0 Now</a></div>
         <div class="btn btn-red">Start Rocking</div>
       </div>
 
     </div>
   </div>
+
+  <div class="feature wrapper">
+    <span>
+      <h2>Abstract Math Theory</h2>
+      <p>Abstract.js is based on abstract math theory. It puts new concept into Web Development.<a href="">Learn Basic Concept & Theory</a></p>
+    </span>
+    <span>
+      <h2>Virual DOM</h2>
+      <p>
+        Models refer to page block. And Each Models has children and one parent. Thus it construct a virual dom tree.
+      </p>
+    </span>
+
+    <span>
+      <h2>Event Progation</h2>
+      <p>
+        Events emmitted by one models can progation to the top of the virual dom tree.
+        So you can capture the event on the root node or stopPropagation.
+      </p>
+    </span>
+
+    <span>
+      <h2>Strict MVC</h2>
+      <p>
+        Every piece of code looks so familar. Abstract reduces the chance of refactor of your project.
+      </p>
+    </span>
+
+    <span>
+      <h2>Easy And Fast</h2>
+      <p>
+        It takes few minutes to build one mobile page. So fast!
+      </p>
+    
+    </span>
+
+    <span>
+       <h2>Friendly With Lib</h2>
+      <p>
+        If you're using jQuery or zepto, the ajax module will be handled by the lib.
+      </p>
+    </span>
+  </div>
+
+
+  <div class="spliter wrapper"></div>
+
   <div class="using wrapper">
     <h2>Who Are Using Abstract?</h2>
     <div class="usingIntro">
@@ -35,84 +83,27 @@
       <span class="moreOfYou"><div class="icon"></div>More of You<br /></span>
     </div>
   </div>
+
+  <div class="spliter wrapper"></div>
   <div class="main wrapper">
-    <div class="exam">
-      <h2>Simple RenderModel</h2>
-      <div class="des">
-        RenderModel is Using for Rendering Page Blocking;Here is a sample for RenderModel;
-      </div>
-
-
-      <pre>
-    var header = new RenderModel({
-      el: ".header",
-      url: "/cgi/headerData",
-      processData: function(data){
-      },
-
-      template: "&lt;li soda-repeat='item in list'>{{item.name}}&lt;/li>"
-    });
-
-    header.rock();
-      </pre>
-
-      <h2>Simple ScrollModel</h2>
-      <div class="des">
-        ScrollModel is Using for Rendering Blockings which loads more content when users pull down list to the bottom.
-      </div>
-      <pre>
-    var header = new ScrollModel({
-      el: ".list",
-      scrollEl: ".list",
-      url: "/cgi/headerData",
-      processData: function(data){
-      },
-
-      template: "&lt;li soda-repeat='item in list'>{{item.name}}&lt;/li>"
-    });
-
-    header.rock();
-      </pre>
-
-      <h2>PageModel</h2>
-      <div class="des">
-        PageModel is one of Relationship Model, which tells the relationship between models; 
-      </div>
-
-      <h2>MultitabModel</h2>
-      <div class="des">
-        MultitabModel is one of Relationship Model, which tells the relationship between models;
-      </div>
-
-      <pre>
-      var tab1 = new RenderModel();
-      var tab2 = new RenderModel();
-
-      var tab = new MultitabModel();
-
-      tab.add(".tab1", tab1);
-      tab.add(".tab2", tab2);
-
-      tab.rock();
-      </pre>
-
+   
       <h2>Let's see what Abstract can do.</h2>
       <h2>Rendering</h2>
 
       <div class="des">
         <div class="examintro">
-          <pre>
-        var header = new RenderModel({
-          el: "#render",
-          data: {
-            title: "Abstract.js",
-            desc: "Abstract.js is next framework for the web"
-          },
+          <pre class="brush: javascript">
+var header = new RenderModel({
+  el: "#render",
+  data: {
+    title: "Abstract.js",
+    desc: "Abstract.js is next framework for the web"
+  },
 
-          tmpl: "{{title}}&lt;br />{{desc}}"
-        });
+  tmpl: "{{title}}&lt;br />{{desc}}"
+});
 
-        header.rock();
+header.rock();
           </pre>
         </div>
 
@@ -124,21 +115,21 @@
       <div class="des">
         <div>Try scrolling to bottom</div>
       	<div class="examintro">
-      		<pre>
+      		<pre class="brush:js">
       var listing = new ScrollModel({
-      data: {
-      list: [
-      'Abstact.js publishes version 2.0',
-      'Abstact.js publishes version 2.0',
-      'Abstact.js publishes version 2.0',
-      'Abstact.js publishes version 2.0',
-      'Abstact.js publishes version 2.0'
-      ]
-      },
+          data: {
+          list: [
+            'Abstact.js publishes version 2.0',
+            'Abstact.js publishes version 2.0',
+            'Abstact.js publishes version 2.0',
+            'Abstact.js publishes version 2.0',
+            'Abstact.js publishes version 2.0'
+          ]
+        },
 
-      scrollEl: '#listing',
-      tmpl: "&lt;li soda-repeat='item in list'>{{item}}&lt;/li>",
-      el: "#listing"
+        scrollEl: '#listing',
+        tmpl: "&lt;li soda-repeat='item in list'>{{item}}&lt;/li>",
+        el: "#listing"
       });
 
       listing.rock();
@@ -154,35 +145,35 @@
       <h2>Tabs</h2>
       <div class="des">
         <div class="examintro">
-          <pre>
-          var tab1 = new RenderModel({
-            el: ".tabpage",
-            data: {
-              name: "tab1"
-            },
-            tmpl: "{{name}}"
-          });
+   	<pre class="brush:js">
 
-          var tab2 = tab1.extend({
-            el: "#tab
-            data: {
-              name: "tab2"
-            }
-          });
+var tab1 = new RenderModel({
+  el: ".tabpage",
+  data: {
+    name: "tab1"
+  },
+  tmpl: "{{name}}"
+});
 
-          var tab3 = tab1.extend({
-            data: {
-              name: "tab3"
-            }
-          });
+var tab2 = tab1.extend({
+  data: {
+    name: "tab2"
+  }
+});
 
-          var tab = new MultitabModel();
-          tab.add(".tab1");
-          tab.add(".tab2");
-          tab.add(".tab3");
+var tab3 = tab1.extend({
+  data: {
+    name: "tab3"
+  }
+});
 
-          tab.rock();
+// Telling The Relationship Between Models
+var tab = new MultitabModel();
+tab.add(".tab1", tab1);
+tab.add(".tab2", tab2);
+tab.add(".tab3", tab3);
 
+tab.rock();
           </pre>
         </div>
 
@@ -200,7 +191,7 @@
       <h2>Paging</h2>
       <div class="des">
       	<div class="examintro">
-      		<pre>
+      		<pre class="brush:js">
 var pageList = new RenderModel({
     el: ".contentList",
     tmpl: "&lt;li soda-repeat='item in list'>{{item}}&lt;/li>",
@@ -221,8 +212,8 @@ var pagation = new RenderModel({
       list: new Array(10)
     },
 
-processData: function(){
-},
+    processData: function(){
+    },
 
     events: function(){
       var els = document.querySelectorAll(".pageItem");
@@ -248,6 +239,7 @@ processData: function(){
     }
 });
 
+// Telling The Relationship Between Models
 var pageWrapper = new PageModel();
 pageWrapper.add(pageList);
 pageWrapper.add(pagation);
@@ -268,8 +260,8 @@ pageWrapper.rock();
       <h2>Quick Mobile Page</h2>
       <div class="des">
         <div class="examintro">
-          <pre>
-        var header = new RenderModel({
+          <pre class="brush:js">
+var header = new RenderModel({
     el: "#header",
     data: {
       name: "Header"
@@ -315,6 +307,7 @@ var setting = me.extend({
 });
 
 
+// Telling The Relationship Between Models
 var tabs = new MultitabModel();
 tabs.add(".news", newsTab);
 tabs.add(".me", me);
@@ -350,7 +343,7 @@ page.rock();
 
       <div class="des">
         <div class="examintro">
-          <pre>
+          <pre class="brush:js">
 // dialog
 var dialogRender = new RenderModel({
   data: {
@@ -377,6 +370,7 @@ var closeModel = new BaseModel({
     fuse: Model.createFuse("click", ".close")
 });
 
+// Telling The Relationship Between Models
 var controller = new MutexModel();
 controller.add(closeModel);
 controller.add(dialogRender);
@@ -394,7 +388,7 @@ controller.rock();
 
       <div class="des">
         <div class="examintro">
-          <pre>
+          <pre class="brush:js">
 // dialog
 var dialogRender2 = new RenderModel({
   data: {
@@ -410,6 +404,7 @@ var dialogRender2 = new RenderModel({
 var closeModel2 = new BaseModel({
 });
 
+// Telling The Relationship Between Models
 var controller2 = new MultitabModel();
 controller2.add(".close2", closeModel2);
 controller2.add("#showDialog2", dialogRender2);
@@ -424,14 +419,53 @@ controller2.rock();
         </div>
       </div>
 
+      <h2>MultiPage with Animation</h2>
+      <div class="des">
+        <div class="examintro">
+          <pre class="brush:js">
+var page1 = new PageModel();
+var pageContent = new RenderModel({
+  tmpl: "page1 &lt;br />&lt;br />&lt;div class='btn openPage2'>open page2&lt;/div>",
+  el: ".subpage_1"
+});
 
-      <h2>Abstract is not MVVM Framework, but also Abstract can construct MVVM logics as well. <br />
+page1.add(pageContent);
+pageContent.hide = function(){
+  Model.$(this.el).removeClass("current");
+};
+
+pageContent.show = function(){
+  Model.$(this.el).addClass("current");
+};
+
+var page2 = page1.extend();
+page2.children[0].tmpl = "page2 &lt;br />&lt;br />&lt;span class='btn closePage2'>back&lt;/span>";
+page2.children[0].el = ".subpage_2";
+
+// Telling The Relationship Between Models
+var controllPage = new MultitabModel();
+controllPage.add(".closePage2", page1);
+controllPage.add(".openPage2", page2);
+
+controllPage.rock();
+
+          </pre>
+        </div>
+        <div class="codePlay" id="pageAnimation">
+            <div class="subpage_1"></div>
+            <div class="subpage_2"></div>
+        </div>
+      </div>
+
+<div class="spliter wrapper"></div>
+      <h2>MVVM Using</h2>
+      <div class='des'>Abstract is not MVVM Framework, but also Abstract can construct MVVM logics as well. <br />
         But Abstract concerns about the logic about datas, not the views.
-      </h2>
+      </div>
       <h2>To Do</h2>
       <div class="des">
         <div class="examintro">
-          <pre>
+          <pre class="brush:js">
 var todoList = new RenderModel({
   data: {
     list: []
@@ -470,7 +504,7 @@ todoList.rock();
       <h2>Markdown Editor</h2>
       <div class="des">
         <div class="examintro">
-          <pre>
+          <pre class="brush:js">
 
 var markdown = new RenderModel({
   el: ".outMd",
@@ -494,7 +528,7 @@ markdown.rock();
         </div>
         <div id="markdownEditor" class="codePlay">
           <h3>Input</h3>
-          <textarea rows="15" cols="35" id="mdInput" placeholder="input markdown here"></textarea>
+          <textarea rows="15" cols="35" id="mdInput" placeholder="Type markdown here"></textarea>
           <h3>Output</h3>
           <div class="outMd"></div>
         </div>
@@ -503,7 +537,7 @@ markdown.rock();
       <h2>Progress Bar</h2>
       <div class="des">
         <div class="examintro">
-          <pre>
+          <pre class="brush:js">
 
 var bar = new RenderModel({
     el: "#bar",
@@ -537,22 +571,66 @@ bar.rock();
     </div>
   </div>
 
-  <div class="wrapper">
-    © AlloyTeam
+  <div class="toTop hide" id="toTop">顶部</div>
+  <div class="wrapper copyright">
+   
+    ©  AlloyTeam
   </div>
 </div>
+
+<script type="text/javascript" src="js/shCore.js"></script>
+<script type="text/javascript" src="js/shBrushJScript.js"></script>
 
 <script type="text/javascript" src="js/abstract-2.0.js"></script>
 <script type="text/javascript" src="js/bo.js"></script>
 <script type="text/javascript" src="js/marked.min.js"></script>
 
 <script type="text/javascript">
+SyntaxHighlighter.defaults['tab-size'] = 4;
+SyntaxHighlighter.defaults['toolbar'] = false;
+SyntaxHighlighter.all();
+
+// Draw Virual DOM Structure
+var R = 10;
+var drawStructure = {
+  init: function(rootModel, el){
+          var WIDTH = 400;
+          var HEIGHT = 300;
+
+          var canvas = document.createElement("canvas");
+          var ctx = canvas.getContext("2d");
+
+          canvas.width = WIDTH;
+          canvas.height = HEIGHT;
+
+          this.ctx = ctx;
+          this.canvas = canvas;
+
+          querySelector("el").appendChild(this.canvas);
+
+          var drawChild = function(parentNode, x, y){
+              var len = parentNode.children.length;
+
+
+          };
+  },
+
+  drawModel: function(model, x, y){
+
+  }
+};
+
+
 var handler = function(){
   var hash = window.location.hash;
   if(hash === "#doc"){
-    document.body.className += "doc";
+    document.body.className += " doc";
   }else{
 
+    var showAni = parseInt(window.localStorage.getItem("Abstract_showAni") || '0');
+    showAni ++;
+
+  window.localStorage.setItem("Abstract_showAni", showAni);
   bo.init("Abstract.js 2.0", "The Next Framework For Web", function(){
       window.location.hash ="doc";
       //document.body.className += "doc";
@@ -578,6 +656,11 @@ var handler = function(){
 
 window.onhashchange = handler;
 
+
+if(window.localStorage.getItem("Abstract_showAni") === "2"){
+  window.location = "#doc";
+}
+
 handler();
 
 
@@ -597,7 +680,7 @@ header.rock();
 var tab1 = new RenderModel({
 el: ".tabpage",
 data: {
-name: "tab1"
+  name: "tab1"
 },
 tmpl: "{{name}}"
 });
@@ -880,6 +963,50 @@ controller2.add("#showDialog2", dialogRender2);
 
 controller2.rock();
 
+
+var page1 = new PageModel();
+var pageContent = new RenderModel({
+tmpl: "page1 <br /><br /><div class='btn openPage2'>open page2</div>",
+    el: ".subpage_1"
+});
+
+page1.add(pageContent);
+pageContent.hide = function(){
+  Model.$(this.el).removeClass("current");
+};
+
+pageContent.show = function(){
+  Model.$(this.el).addClass("current");
+};
+
+var page2 = page1.extend();
+page2.children[0].tmpl = "page2 <br /><br /><span class='btn closePage2'>back</span>";
+page2.children[0].el = ".subpage_2";
+
+var controllPage = new MultitabModel();
+controllPage.add(".closePage2", page1);
+controllPage.add(".openPage2", page2);
+
+
+
+controllPage.rock();
+
+
+var toTop = document.getElementById("toTop");
+window.addEventListener("scroll", function(){
+   var scrollTop = document.body.scrollTop;
+
+   var $ = Model.$;
+   if(scrollTop < 30){
+      $("#toTop").addClass("hide");
+   }else{
+      $("#toTop").removeClass("hide");
+   }
+});
+
+toTop.onclick = function(){
+    window.scrollTo(0, 0)
+};
 </script>
 </body>
 </html>

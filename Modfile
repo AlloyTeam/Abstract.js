@@ -2,7 +2,7 @@
 module.exports = {
     tasks:{
         cat:{
-            source:[ 'src/sodarender.js', 'src/core.js', 'src/basemodel.js', 'src/relationmodel.js', 'src/pagemodel.js', 'src/mutexmodel.js', 'src/multitabmodel.js', 'src/rendermodel.js', 'src/scrollmodel.js', 'src/loadmodel.js', 'src/linkmodel.js', 'src/cgimodel.js']
+            source:[ 'src/copyright.js', 'src/sodarender.js', 'src/core.js', 'src/basemodel.js', 'src/relationmodel.js', 'src/pagemodel.js', 'src/mutexmodel.js', 'src/multitabmodel.js', 'src/rendermodel.js', 'src/scrollmodel.js', 'src/loadmodel.js', 'src/linkmodel.js', 'src/cgimodel.js']
             ,dest: 'combined/abstract-2.0.js'
         },
         

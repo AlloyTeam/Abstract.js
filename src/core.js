@@ -11,7 +11,7 @@
     };
 
     var hasClass =  function(el, className) {
-        el.className.search(classNameRegExp(className)) !== -1;
+        return el.className.search(classNameRegExp(className)) !== -1;
     };
 
 
