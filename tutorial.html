@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Abstract.js</title>
+<link media="all" rel="stylesheet" href="css/index.css" type="text/css" />
+<link media="all" rel="stylesheet" href="css/tutorial.css" type="text/css" />
+	<link type="text/css" rel="stylesheet" href="css/shCoreDefault.css"/>
+</head>
+<body class="doc">
+
+<div class="page page2">
+  <div class="header"><span class="logo"></span>Abstract.js
+    <span class="right">Document &nbsp;<a target="_blank" href="https://github.com/AlloyTeam/Abstract.js">GitHub</a> &nbsp;<a target="_blank" href="http://www.alloyteam.com">Team Blog</a></span>
+  </div>
+  <div class="contentList">
+    <div class="index">
+
+    </div>
+    <div class="content">
+      
+    </div>
+  </div>
+  <div class="toTop hide" id="toTop">顶部</div>
+
+</div>
+
+<script type="text/javascript" src="js/shCore.js"></script>
+<script type="text/javascript" src="js/shBrushJScript.js"></script>
+
+<script type="text/javascript" src="js/abstract-2.0.js"></script>
+<script type="text/javascript" src="js/marked.min.js"></script>
+<script type="text/javascript">
+SyntaxHighlighter.defaults['tab-size'] = 4;
+SyntaxHighlighter.defaults['toolbar'] = false;
+
+
+var tutorialList = [
+  {title: "Get Rendering Page", link: "renderpage"},
+  {title: "Basic Concept & Theory", link: "theory"}
+];
+
+var renderList = new RenderModel({
+  data: {
+    list: tutorialList
+  },
+
+  tmpl: '\
+    <ul>\
+    <li class="link" soda-repeat="item in list" id="{{item.link}}">{{item.title}}</li>\
+    </ul>\
+      <div class="wrapper copyright">\
+        ©  AlloyTeam\
+      </div>\
+  ',
+  el: ".index"
+});
+
+var content = new RenderModel({
+  el: ".content",
+  processData: function(data){
+    var md = marked(data, {sanitize: false});;
+
+    return {
+      content: md
+    };
+
+  },
+
+tmpl: "<div soda-bind-html='content'></div>",
+
+complete: function(data, cgiCount){
+      SyntaxHighlighter.all();
+}
+});
+
+var tabs = new MultitabModel();
+for(var i = 0; i < tutorialList.length; i ++){
+  var item = tutorialList[i];
+
+  var link = item.link;
+
+  var tab = content.extend({
+      url: "data/" + link + ".md"
+  });
+
+  tabs.add("#" + link, tab);
+}
+
+var pageModel = new PageModel();
+pageModel.add(renderList);
+pageModel.add(tabs);
+
+pageModel.rock();
+
+</script>
+
+</body>
+</html>

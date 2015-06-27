@@ -1,0 +1,29 @@
+.contentList {
+    margin-top: 58px;
+    background-color: #fff;
+    height: initial;
+}
+
+.index {
+    float: left;
+    /* border: 1px solid red; */
+    padding: 2px 16px;
+    background-color: #D2D2D2;
+    height: 100%;
+    position: fixed;
+}
+
+.content {
+    margin-left: 252px;
+    background-color: #fff;
+}
+
+.copyright {
+    width: 189px;
+    position: absolute;
+    bottom: 12px;
+}
+
+.link {
+    cursor: pointer;
+}
