@@ -617,3 +617,14 @@ span.controll1 {}
 .controller > span.active {
     background: rgb(36, 202, 200);
 }
+
+
+.link.active {
+    background-color: rgb(35, 201, 199);
+    color: #fff;
+}
+
+.index ul {
+    margin: 0;
+    padding: 0;
+}

@@ -35,7 +35,9 @@ SyntaxHighlighter.defaults['tab-size'] = 4;
 SyntaxHighlighter.defaults['toolbar'] = false;
 
 var tutorialList = [
-  {title: "Get Rendering Page", link: "renderpage"},
+  {title: "Home", link: "home"},
+  {title: "Quick Glance", link: "glance"},
+  {title: "Render Page", link: "renderpage"},
   {title: "Basic Concept & Theory", link: "theory"}
 ];
 
@@ -57,6 +59,8 @@ var renderList = new RenderModel({
 
 var content = new RenderModel({
   el: ".content",
+  myData: {
+  },
   processData: function(data){
     var md = marked(data, {sanitize: false});;
 
@@ -68,11 +72,15 @@ var content = new RenderModel({
 
   method: "GET",
 
-tmpl: "<div soda-bind-html='content'></div>",
+  tmpl: "<div soda-bind-html='content'></div>",
 
-complete: function(data, cgiCount){
-      SyntaxHighlighter.highlight();
-}
+  complete: function(data, cgiCount){
+        SyntaxHighlighter.highlight();
+
+        console.log(this.myData);
+
+        window.location.hash = this.myData.selector;
+  }
 });
 
 var tabs = new MultitabModel();
@@ -81,12 +89,24 @@ for(var i = 0; i < tutorialList.length; i ++){
 
   var link = item.link;
 
-  var tab = content.extend({
-      url: "data/" + link + ".md"
-  });
+  var tab;
+  if(link === "home"){
+     tab = new LinkModel({
+         url: "index.html"
+     });
+
+  }else{
+    tab = content.extend({
+        url: "data/" + link + ".md"
+    });
+
+    tab.myData.selector = link;
+  }
 
   tabs.add("#" + link, tab);
 }
+
+tabs.init("#" + tutorialList[1].link);
 
 var pageModel = new PageModel();
 pageModel.add(renderList);

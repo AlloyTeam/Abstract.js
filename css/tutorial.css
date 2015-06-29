@@ -7,16 +7,18 @@
 .index {
     float: left;
     /* border: 1px solid red; */
-    padding: 2px 16px;
+    padding: 2px 0;
     background-color: #D2D2D2;
     height: 100%;
     position: fixed;
 }
 
 .content {
-    margin-left: 252px;
+    margin-left: 230px;
     background-color: #fff;
     padding-left: 28px;
+    padding-bottom: 25px;
+    min-height: 100%;
 }
 
 .copyright {
@@ -27,4 +29,6 @@
 
 .link {
     cursor: pointer;
+    padding: 10px 23px;
+    list-style: none;
 }
