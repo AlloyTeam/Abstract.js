@@ -20,6 +20,7 @@
       
     </div>
   </div>
+
   <div class="toTop hide" id="toTop">顶部</div>
 
 </div>
@@ -32,7 +33,6 @@
 <script type="text/javascript">
 SyntaxHighlighter.defaults['tab-size'] = 4;
 SyntaxHighlighter.defaults['toolbar'] = false;
-
 
 var tutorialList = [
   {title: "Get Rendering Page", link: "renderpage"},
@@ -66,10 +66,12 @@ var content = new RenderModel({
 
   },
 
+  method: "GET",
+
 tmpl: "<div soda-bind-html='content'></div>",
 
 complete: function(data, cgiCount){
-      SyntaxHighlighter.all();
+      SyntaxHighlighter.highlight();
 }
 });
 

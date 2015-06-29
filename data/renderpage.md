@@ -11,16 +11,16 @@ Before writing code, we need to think about how to split the page to render bloc
 ###Writing Html Frame
 Writing your html frame for every block
 
-```javascript
+<pre class="brush: js">
 &lt;div class="header">&lt;/div>
 &lt;div class="nav">&lt;/div>
 &lt;div class="recommend">&lt;/div>
 &lt;div class="list">&lt;/div>
-```
+</pre>
 
 ###Config
 header, nav, recommend block will render once, we think they are just common renderModels. While list block will render more after we pull the list to bottom, we think it's scrollModel. So setting the config as below.
-<pre class="brush: javascript">
+<pre class="brush:js">
 var header = new RenderModel({
    el: ".header",
    url: "cgi/get_header",
@@ -61,19 +61,19 @@ What's more, there is MultitabModel, which is not a new relationship, but is Mut
 
 So we can find out which relationship is between the models. The four models will be active at the same time, so it's PageModel;
 
-```javascript
+<pre class="brush: javascript">
 var page = new PageModel();
 page.add(header);
 page.add(nav);
 page.add(recommend);
 page.add(list);
-```
+</pre>
 
 ### Enjoy Rocking
 So far, the page will run nothing. Because we need to let every block move. It's like the puppet was cut out every block, we need to give him the electric shock to let him be live.
 
 Here we run the Rock Method. The page is live;
 
-```javascript
+<pre class="brush: javascript">
 page.rock();
-```
+</pre>
