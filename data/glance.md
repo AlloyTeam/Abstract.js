@@ -11,7 +11,7 @@ Before writing code, we need to think about how to split the page to render bloc
 ###Writing Html Frame
 Writing your html frame for every block
 
-<pre class="brush: js">
+<pre class="brush: xml">
 &lt;div class="header">&lt;/div>
 &lt;div class="nav">&lt;/div>
 &lt;div class="recommend">&lt;/div>

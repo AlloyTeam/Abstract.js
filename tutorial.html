@@ -27,6 +27,7 @@
 
 <script type="text/javascript" src="js/shCore.js"></script>
 <script type="text/javascript" src="js/shBrushJScript.js"></script>
+<script type="text/javascript" src="js/shBrushXml.js"></script>
 
 <script type="text/javascript" src="js/abstract-2.0.js"></script>
 <script type="text/javascript" src="js/marked.min.js"></script>
@@ -97,16 +98,21 @@ for(var i = 0; i < tutorialList.length; i ++){
 
   }else{
     tab = content.extend({
-        url: "data/" + link + ".md"
+        url: "data/" + link + ".md",
+        myData: {
+          selector: link
+        }
     });
-
-    tab.myData.selector = link;
   }
 
   tabs.add("#" + link, tab);
 }
 
-tabs.init("#" + tutorialList[1].link);
+if(window.location.hash){
+  tabs.init(window.location.hash);
+}else{
+  tabs.init("#" + tutorialList[1].link);
+}
 
 var pageModel = new PageModel();
 pageModel.add(renderList);
