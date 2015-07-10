@@ -169,7 +169,7 @@
                     el = el[0];
                 }
 
-                if(el instanceof HTMLElement){
+                if(el instanceof Node){
                     if(isReplace){
                         el.innerHTML = "";
                     }
