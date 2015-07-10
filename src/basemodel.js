@@ -354,7 +354,7 @@
             this._resetPrivateFlag.call(clone);
 
             for(var i in opt){
-                if(opt[i]){
+                if(typeof opt[i] !== undefined){
                     clone[i] = opt[i];
                 }
             }
