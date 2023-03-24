@@ -1,5 +1,5 @@
 # Abstract.js
-Abstract.js is a new and amazing framework for fast web development. It's the world's first Logic Oriented Program Framework(As I know). Using Abstract.js you can construct a readable, tidy project.
+Abstract.js is a new and amazing framework for fast web development. It's the world's first Logic Oriented Program Framework(As I know). Using abstract.js and node.js you can construct a readable, tidy project.
 
 * **Abstract Models & Core Concept:**Here the Models don't refer to the M of MVC, but drawn from the model concept in Mathematic. Abstract.js rethought construction of the web page and found the common and abstract actions in web development.
 <br />We extract two base models which can describe all the web development. So it's rendering model and relationship model in Abstract.js.
